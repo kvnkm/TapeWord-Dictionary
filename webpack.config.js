@@ -2,10 +2,10 @@ const path = require("path");
 
 module.exports = {
   mode: "development",
-  devtool: "eval-source-map",
+  devtool: "source-map",
   entry: {
-    background: "./src/background.ts",
-    contentScript: "./src/display.ts",
+    background: "./src/background/index.ts",
+    contentScript: "./src/view/display.ts",
   },
   module: {
     rules: [
