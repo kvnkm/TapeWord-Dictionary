@@ -1,13 +1,5 @@
 import { browser, Menus, Tabs } from "webextension-polyfill-ts";
-
-interface Definition {
-  def: string;
-  example: string;
-}
-
-export interface Definitions {
-  [wordType: string]: Definition[];
-}
+import { Definition, Definitions, State } from "../types";
 
 const fetchHeaders = {
   method: "GET",
@@ -18,7 +10,7 @@ const fetchHeaders = {
   },
 };
 
-async function getDefRes(termString: String): Promise<Response> {
+async function getDefRes(termString: string): Promise<Response> {
   const endPoint: string = `https://cors-anywhere.herokuapp.com/https://www.lexico.com/en/definition/${termString}`;
   const defRes: Response = await fetch(endPoint, fetchHeaders);
   return Promise.resolve(defRes);
@@ -32,7 +24,7 @@ async function parseDefRes(defRes: Response): Promise<Definitions> {
   );
 
   // Retrieve the definitions by word types
-  let wordTypes: Definitions = {};
+  let definitions: Definitions = {};
 
   /**
    * If no exact matches for the term were found, check for nearest result then return that definition
@@ -46,10 +38,12 @@ async function parseDefRes(defRes: Response): Promise<Definitions> {
   )[0];
   if (nearestResult) {
     console.log(nearestResult);
-    const resultString: String = (nearestResult as HTMLAnchorElement).innerText;
+    const resultString: string = (nearestResult as HTMLAnchorElement).pathname.match(
+      /\/definition\/(.*)/
+    )![1];
     return Promise.resolve(parseDefRes(await getDefRes(resultString)));
   }
-  if (noMatchFound) return Promise.resolve(wordTypes);
+  if (noMatchFound) return Promise.resolve(definitions);
 
   const wordTypeSections: NodeListOf<Element> = resDoc.querySelectorAll(
     "section.gramb"
@@ -58,7 +52,10 @@ async function parseDefRes(defRes: Response): Promise<Definitions> {
     const wordType: string = (wordTypeSection.querySelectorAll(
       "h3.ps.pos > span.pos"
     )[0] as HTMLElement).innerText;
-    wordTypes[wordType] = [];
+    definitions[wordType] = {
+      selected: false,
+      defs: [],
+    }; // FIXME
 
     const definitionElements: NodeListOf<Element> = wordTypeSection.querySelectorAll(
       "ul.semb > li"
@@ -78,12 +75,13 @@ async function parseDefRes(defRes: Response): Promise<Definitions> {
       const example: string = exampleContainer
         ? (exampleContainer as HTMLDivElement).innerText
         : "";
-      const definition: Definition = { def, example };
-      wordTypes[wordType].push(definition);
+      const selected: Boolean = false;
+      const definition: Definition = { def, example, selected };
+      definitions[wordType].defs.push(definition);
     });
   });
 
-  return Promise.resolve(wordTypes);
+  return Promise.resolve(definitions);
 }
 
 browser.contextMenus.create({
@@ -103,8 +101,11 @@ browser.contextMenus.onClicked.addListener(
       const defRes: Response = await getDefRes(selectionText);
 
       const defs: Definitions = await parseDefRes(defRes);
-      let msg: Definitions | null;
-      Object.keys(defs).length === 0 ? (msg = null) : (msg = defs);
+      const state: State = Object.keys(defs).map((wordType) => ({
+        [wordType]: defs[wordType],
+      }));
+      let msg: State | null;
+      state.length === 0 ? (msg = null) : (msg = state);
 
       browser.tabs.sendMessage(tab?.id || 0, msg);
     }
