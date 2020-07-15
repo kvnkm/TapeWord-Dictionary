@@ -9,19 +9,21 @@ function getNewStrings(definitions: Definitions): { [term: string]: string } {
   return { wordType, defString, exampleString };
 }
 
-function hydrate(): void {
-  // Test event-propagation listener
-  const mainFrame: HTMLDivElement = document.getElementsByClassName(
-    "-_WORDSTAR_-main-frame"
-  )[0] as HTMLDivElement;
-  mainFrame.addEventListener("click", onArrowClick);
-}
-
 function reRender(
   renderType: RenderType,
   newStrings: { [term: string]: string }
 ): void {
   //
+  const defEl: HTMLElement = document.getElementsByClassName(
+    "definitions__definition"
+  )[0] as HTMLElement;
+  const exampleEl: HTMLElement = document.getElementsByClassName(
+    "definitions__example"
+  )[0] as HTMLElement;
+
+  defEl.innerText = newStrings.defString;
+  exampleEl.innerText = newStrings.exampleString;
+
   switch (renderType) {
     case "newType": {
       // Re-render types & definitions components
@@ -29,44 +31,27 @@ function reRender(
       const wordTypeEl: HTMLHeadingElement = document.querySelectorAll(
         "h1.types__label"
       )[0] as HTMLHeadingElement;
-      const defEl: HTMLElement = document.getElementsByClassName(
-        "definitions__definition"
-      )[0] as HTMLElement;
-      const exampleEl: HTMLElement = document.getElementsByClassName(
-        "definitions__example"
-      )[0] as HTMLElement;
       wordTypeEl.innerText = newStrings.wordType;
-      defEl.innerText = newStrings.defString;
-      exampleEl.innerText = newStrings.exampleString;
       render(wordTypeEl);
-      render(defEl);
-      render(exampleEl);
-
-      break;
     }
-    case "newDefinition": {
-      const defEl: HTMLElement = document.getElementsByClassName(
-        "definitions__definition"
-      )[0] as HTMLElement;
-      const exampleEl: HTMLElement = document.getElementsByClassName(
-        "definitions__example"
-      )[0] as HTMLElement;
-      defEl.innerText = newStrings.defString;
-      exampleEl.innerText = newStrings.exampleString;
-      render(defEl);
-      render(exampleEl);
-
+    case "newDefinition":
+      {
+        render(defEl);
+        render(exampleEl);
+      }
       break;
-    }
     default:
-      console.log("Error during re-rendering");
+      throw new Error(
+        "WORDSTAR Error: arg -> renderType wasn't supplied correctly in [reRender(renderType: RenderType, newStrings: { [term: string]: string }): void]"
+      );
   }
 }
 
 function onArrowClick(e: Event): void {
-  // Get state & arrow-type
   const state = getState();
   const arrowType: string = (e.target as HTMLElement).id;
+  const wordType: string = Object.keys(state[0])[0];
+  const defs: Definition[] = state[0][wordType].defs;
 
   switch (arrowType) {
     case "upArrow_path":
@@ -93,8 +78,6 @@ function onArrowClick(e: Event): void {
     case "leftArrow":
       {
         // Rotate state[wordType].defs array backwards
-        const wordType: string = Object.keys(state[0])[0];
-        const defs: Definition[] = state[0][wordType].defs;
         const defsTail: Definition = defs.shift()!;
         defs.push(defsTail);
 
@@ -102,25 +85,23 @@ function onArrowClick(e: Event): void {
       }
       break;
     case "rightArrow_path":
-    case "rightArrow":
-      {
-        // Rotate state[wordType].defs array forwards
-        const wordType: string = Object.keys(state[0])[0];
-        const defs: Definition[] = state[0][wordType].defs;
-        const defsHead: Definition = defs.pop()!;
-        defs.unshift(defsHead);
+    case "rightArrow": {
+      // Rotate state[wordType].defs array forwards
+      const defsHead: Definition = defs.pop()!;
+      defs.unshift(defsHead);
 
-        reRender("newDefinition", getNewStrings(state[0]));
-      }
-      break;
+      reRender("newDefinition", getNewStrings(state[0]));
+    }
     default:
-      break;
+      throw new Error(
+        "WORDSTAR Error: Registered click didn't originate from a button"
+      );
   }
 }
 
 export default function render(element: HTMLElement): void {
   const componentName: string = element.className;
-  // Declare function-scoped elements for access by case blocks
+  // Declare function-scoped element for access by case blocks
   const definitionsContainer: HTMLDivElement = document.getElementsByClassName(
     "definitions"
   )[0] as HTMLDivElement;
@@ -131,7 +112,10 @@ export default function render(element: HTMLElement): void {
       body.appendChild(element);
 
       // Add button-click event listeners
-      hydrate();
+      const mainFrame: HTMLDivElement = document.getElementsByClassName(
+        "-_WORDSTAR_-main-frame"
+      )[0] as HTMLDivElement;
+      mainFrame.addEventListener("click", onArrowClick);
       break;
 
     case "types__label":
@@ -169,6 +153,8 @@ export default function render(element: HTMLElement): void {
       definitionsContainer.appendChild(element);
       break;
     default:
-      console.log("default switch execution");
+      throw new Error(
+        "WORDSTAR Error: [render(element: HTMLElement): void] could not handle for componentName"
+      );
   }
 }
