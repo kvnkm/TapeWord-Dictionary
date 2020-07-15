@@ -1,8 +1,21 @@
-export const styles = {
+import { Styles } from "../types";
+
+const styles = {
+  ".-_WORDSTAR_-null-frame": {
+    background: "rgba(247, 118, 157, 0.8);",
+  },
   ".-_WORDSTAR_-main-frame": {
+    background: "rgba(118, 247, 223, 0.8);",
+  },
+  "-_WORDSTAR_-null-frame__message": {
+    /*  add font family
+        bold font */
+  },
+  [`.-_WORDSTAR_-main-frame,
+    .-_WORDSTAR_-null-frame`]: {
     "z-index": "70000;",
     display: "flex;",
-    "box-sizing": "border-box",
+    "box-sizing": "border-box;",
     "backdrop-filter": "blur(5.5px);",
     position: "absolute;",
     top: "50%;",
@@ -11,7 +24,6 @@ export const styles = {
     "border-radius": "0px 5px 5px 5px;",
     width: "max-content;",
     height: "max-content;",
-    background: "rgba(118, 247, 223, 0.8);",
   },
   [`.-_WORDSTAR_-main-frame > .types button,
     .-_WORDSTAR_-main-frame > .definitions button`]: {
@@ -50,3 +62,17 @@ export const styles = {
     transition: "transform 0.15s linear;",
   },
 };
+
+function parseStyles(styles: Styles): string {
+  const rulesArray: string[] = Object.keys(styles).map((s) => {
+    const selector: string = s;
+    const declarationsArray: string[] = Object.keys(styles[selector]).map(
+      (property) => property + ":" + styles[selector][property]
+    );
+    return s + " {" + declarationsArray.join(" ") + "}";
+  });
+  const css: string = rulesArray.join(" ");
+  return css;
+}
+
+export const frameStyles: string = parseStyles(styles);

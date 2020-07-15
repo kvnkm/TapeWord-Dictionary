@@ -10,6 +10,27 @@ const fetchHeaders = {
   },
 };
 
+function abbreviate(term: string): string {
+  switch (term) {
+    case "noun":
+      return term;
+    case "adjective":
+      return "adj.";
+    case "adverb":
+      return "adv.";
+    case "verb":
+      return term;
+    case "interjection":
+      return "interj.";
+    case "pronoun":
+      return "p.noun";
+    case "abbreviation":
+      return "abbv.";
+    default:
+      return term.split("").slice(0, 4).join("") + ".";
+  }
+}
+
 async function getDefRes(termString: string): Promise<Response> {
   const endPoint: string = `https://cors-anywhere.herokuapp.com/https://www.lexico.com/en/definition/${termString}`;
   const defRes: Response = await fetch(endPoint, fetchHeaders);
@@ -43,17 +64,19 @@ async function parseDefRes(defRes: Response): Promise<Definitions> {
     )![1];
     return Promise.resolve(parseDefRes(await getDefRes(resultString)));
   }
-  if (noMatchFound) return Promise.resolve(definitions);
+  if (noMatchFound) return Promise.reject(null);
 
   const wordTypeSections: NodeListOf<Element> = resDoc.querySelectorAll(
     "section.gramb"
   );
-  wordTypeSections.forEach((wordTypeSection) => {
-    const wordType: string = (wordTypeSection.querySelectorAll(
+  // wordTypeSections.forEach((wordTypeSection) => {
+  for (const wordTypeSection of wordTypeSections) {
+    const _wordType: string = (wordTypeSection.querySelectorAll(
       "h3.ps.pos > span.pos"
     )[0] as HTMLElement).innerText;
+    if (!_wordType) continue;
+    const wordType: string = abbreviate(_wordType);
     definitions[wordType] = {
-      selected: false,
       defs: [],
     }; // FIXME
 
@@ -79,7 +102,7 @@ async function parseDefRes(defRes: Response): Promise<Definitions> {
       const definition: Definition = { def, example, selected };
       definitions[wordType].defs.push(definition);
     });
-  });
+  }
 
   return Promise.resolve(definitions);
 }
@@ -100,14 +123,16 @@ browser.contextMenus.onClicked.addListener(
       const selectionText: string = rawSelectionString.split(" ").join("_");
       const defRes: Response = await getDefRes(selectionText);
 
-      const defs: Definitions = await parseDefRes(defRes);
-      const state: State = Object.keys(defs).map((wordType) => ({
-        [wordType]: defs[wordType],
-      }));
-      let msg: State | null;
-      state.length === 0 ? (msg = null) : (msg = state);
+      const defs: Definitions = await parseDefRes(defRes).catch((e) => e);
 
-      browser.tabs.sendMessage(tab?.id || 0, msg);
+      let state: State | null = null;
+      if (defs) {
+        state = Object.keys(defs).map((wordType) => ({
+          [wordType]: defs[wordType],
+        }));
+      }
+
+      browser.tabs.sendMessage(tab?.id || 0, state);
     }
     return;
   }

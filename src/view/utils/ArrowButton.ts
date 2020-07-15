@@ -1,4 +1,5 @@
 interface SvgArrow {
+  id: string;
   viewBox: string;
   g: {
     filter: string;
@@ -21,13 +22,15 @@ function createSVG(arrowType: SvgArrow): SVGElement {
   svg.setAttributeNS(null, "width", "100%");
   svg.setAttributeNS(null, "height", "100%");
   svg.setAttributeNS(null, "viewBox", arrowType.viewBox);
+  svg.setAttributeNS(null, "id", arrowType.id);
 
   const g: SVGGElement = document.createElementNS(xmlns, "g");
   svg.appendChild(g);
-  g.setAttributeNS(null, "filter", `url(#${arrowType.g.filter})`);
+  g.setAttributeNS(null, "filter", `url(${arrowType.g.filter})`);
 
   const path: SVGPathElement = document.createElementNS(xmlns, "path");
   g.appendChild(path);
+  path.setAttributeNS(null, "id", `${arrowType.id}_path`);
   path.setAttributeNS(null, "fill", "black");
   path.setAttributeNS(null, "d", `${arrowType.path.d}`);
 
@@ -108,6 +111,7 @@ function createSVG(arrowType: SvgArrow): SVGElement {
 }
 
 const upArrowSpecs: SvgArrow = {
+  id: "upArrow",
   viewBox: "0 0 12 10",
   g: {
     filter: "#filterUp",
@@ -126,6 +130,7 @@ const upArrowSpecs: SvgArrow = {
 };
 
 const downArrowSpecs: SvgArrow = {
+  id: "downArrow",
   viewBox: "0 0 12 10",
   g: {
     filter: "#filterDown",
@@ -144,6 +149,7 @@ const downArrowSpecs: SvgArrow = {
 };
 
 const leftArrowSpecs: SvgArrow = {
+  id: "leftArrow",
   viewBox: "0 0 9 13",
   g: {
     filter: "#filterLeft",
@@ -162,6 +168,7 @@ const leftArrowSpecs: SvgArrow = {
 };
 
 const rightArrowSpecs: SvgArrow = {
+  id: "rightArrow",
   viewBox: "0 0 9 13",
   g: {
     filter: "#filterRight",
