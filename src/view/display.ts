@@ -12,13 +12,13 @@ import { frameStyles } from "./css";
  *       - add externalClick() handler to DOM
  *       - return
  *     ✔️ set state with defs
- *     - skeleton = generateSkeleton() - FIXME - add animation classes to .main-frame, .types, .definitions
+ *     - skeleton = generateSkeleton() - FIXME - add animation classes to .def-frame, .types, .definitions
  *     - frame = populateElement(element: HTMLElement, definitions: Definitions) - switch (element.className)
- *                                                                                 - case "-_WORDSTAR_-main-frame"
+ *                                                                                 - case "-_WORDSTAR_-def-frame"
  *                                                                                 - case "definitions"
  *     - execute first render with state
  *       - render(element: HTMLElement) - switch (element.className)
- *                                        - case "-_WORDSTAR_-main-frame"
+ *                                        - case "-_WORDSTAR_-def-frame"
  *                                          - body:HTMLBodyElement.appendChild(frame)
  *                                          - add button-event listeners
  * (2) Listen for button clicks
@@ -33,10 +33,10 @@ import { frameStyles } from "./css";
  *                                                                                          - include logic for both def & example nodes
  *       - render(typesEl) - switch (element.className)
  *                           - case "types"
- *                             - div.-_WORDSTAR_-main-frame:HTMLDivElement.appendChild(typesEl)
+ *                             - div.-_WORDSTAR_-def-frame:HTMLDivElement.appendChild(typesEl)
  *       - render(definitionEl) - switch (element.className)
  *                                - case "definitions"
- *                                  - div.-_WORDSTAR_-main-frame:HTMLDivElement.appendChild(definitionEl)
+ *                                  - div.-_WORDSTAR_-def-frame:HTMLDivElement.appendChild(definitionEl)
  *     - handleDefChange(e: Event): void // Update div.definitions leftArrow & rightArrow clicks
  *       - state = setState(state: State, action: Action): State - switch (action)
  *                                                                 - cases "PREVIOUS_DEFINITION", "NEXT_DEFINITION"
@@ -45,7 +45,7 @@ import { frameStyles } from "./css";
  *                                                                                          - case "definitions"
  *       - render(definitionEl) - switch (element.className)
  *                                - case "definitions"
- *                                  - div.-_WORDSTAR_-main-frame:HTMLDivElement.appendChild(definitionEl)
+ *                                  - div.-_WORDSTAR_-def-frame:HTMLDivElement.appendChild(definitionEl)
  * () Determine definition-box dimensions
  *     - Max-content the width and height if possible to do so without hitting window edges
  *       - Else- expand towards the edge(s) and leave buffer(s) of 50px
@@ -63,6 +63,9 @@ export function getState() {
   return state;
 }
 
+// Declare mouse-down tracker
+let isPointerDragged: boolean = false;
+
 function renderErrorFrame(body: HTMLBodyElement) {
   const nullFrame: HTMLDivElement = generateNullFrame();
   body.appendChild(nullFrame);
@@ -78,6 +81,7 @@ function injectStyling(css: string, head: HTMLElement): void {
 function generateNullFrame(): HTMLDivElement {
   const nullFrame: HTMLDivElement = document.createElement("div");
   const nullMessage: HTMLParagraphElement = document.createElement("p");
+  nullFrame.id = "W_O_R_D_STAR";
   nullFrame.className = "-_WORDSTAR_-null-frame";
   nullMessage.className = "-_WORDSTAR_-null-frame__message";
   nullMessage.innerText = "No definition found :(";
@@ -88,7 +92,8 @@ function generateNullFrame(): HTMLDivElement {
 function generateSkeleton(): HTMLDivElement {
   // Create main container
   const frame: HTMLDivElement = document.createElement("div");
-  frame.className = "-_WORDSTAR_-main-frame";
+  frame.className = "-_WORDSTAR_-def-frame";
+  frame.id = "W_O_R_D_STAR";
 
   // Build types-control component
   const typesContainer: HTMLDivElement = document.createElement("div");
@@ -169,6 +174,32 @@ function populateFrame(
   return frame;
 }
 
+function handleMouseEvents(e: Event) {
+  const eventType: string = e.type;
+  const targetEl: EventTarget = e.target!;
+  const closestElement: HTMLElement | null = (targetEl as HTMLElement).closest(
+    "#W_O_R_D_STAR"
+  );
+
+  switch (eventType) {
+    case "mousedown":
+      if (closestElement) isPointerDragged = true;
+      break;
+
+    case "mouseup": {
+      if (!closestElement && !isPointerDragged) {
+        const body: HTMLBodyElement = document.getElementsByTagName("body")[0];
+        const frame: HTMLElement = document.getElementById("W_O_R_D_STAR")!;
+        body.removeChild(frame);
+      } else {
+        isPointerDragged = false;
+      }
+    }
+    default:
+      throw new Error("WORDSTAR Error: Could not handle mouse event");
+  }
+}
+
 browser.runtime.onMessage.addListener((defs) => {
   // Get body & head elements
   const body: HTMLBodyElement = document.getElementsByTagName("body")[0];
@@ -182,14 +213,19 @@ browser.runtime.onMessage.addListener((defs) => {
   } else {
     // Set state and retrieve first set of defs
     state = defs;
-    console.log(state);
     const definitions: Definitions = state[0];
 
-    // Generate and populate frame based on state
+    // Generate and populate frame based on statee: Event
     const frameSkeleton: HTMLDivElement = generateSkeleton();
     const frame: HTMLDivElement = populateFrame(frameSkeleton, definitions);
 
     // Execute first render
     render(frame);
+
+    /** Track mouse-down to enable user to begin a click
+     * (mousedown) inside a frame, drag, and finish the click
+     * (mouseup) outside the frame without frame deletion */
+    document.addEventListener("mousedown", handleMouseEvents);
+    document.addEventListener("mouseup", handleMouseEvents);
   }
 });

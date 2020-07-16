@@ -4,14 +4,14 @@ const styles = {
   ".-_WORDSTAR_-null-frame": {
     background: "rgba(247, 118, 157, 0.8);",
   },
-  ".-_WORDSTAR_-main-frame": {
+  ".-_WORDSTAR_-def-frame": {
     background: "rgba(118, 247, 223, 0.8);",
   },
   "-_WORDSTAR_-null-frame__message": {
     /*  add font family
         bold font */
   },
-  [`.-_WORDSTAR_-main-frame,
+  [`.-_WORDSTAR_-def-frame,
     .-_WORDSTAR_-null-frame`]: {
     "z-index": "70000;",
     display: "flex;",
@@ -25,8 +25,8 @@ const styles = {
     width: "max-content;",
     height: "max-content;",
   },
-  [`.-_WORDSTAR_-main-frame > .types button,
-    .-_WORDSTAR_-main-frame > .definitions button`]: {
+  [`.-_WORDSTAR_-def-frame > .types button,
+    .-_WORDSTAR_-def-frame > .definitions button`]: {
     height: "70px;",
     width: "70px;",
     background: "none;",
@@ -34,30 +34,30 @@ const styles = {
     "box-shadow": "none;",
     cursor: "pointer;",
   },
-  [`.-_WORDSTAR_-main-frame > .types button:hover,
-    .-_WORDSTAR_-main-frame > .definitions button:hover,
-    .-_WORDSTAR_-main-frame > .types button:focus,
-    .-_WORDSTAR_-main-frame > .definitions button:focus`]: {
+  [`.-_WORDSTAR_-def-frame > .types button:hover,
+    .-_WORDSTAR_-def-frame > .definitions button:hover,
+    .-_WORDSTAR_-def-frame > .types button:focus,
+    .-_WORDSTAR_-def-frame > .definitions button:focus`]: {
     background: "none;",
     border: "none;",
     outline: "none;",
   },
-  ".-_WORDSTAR_-main-frame button:hover svg": {
+  ".-_WORDSTAR_-def-frame button:hover svg": {
     transform: "scale(1.1);",
   },
-  ".-_WORDSTAR_-main-frame .types__up-arrow:active": {
+  ".-_WORDSTAR_-def-frame .types__up-arrow:active": {
     transform: "translateY(-2px);",
   },
-  ".-_WORDSTAR_-main-frame .types__down-arrow:active": {
+  ".-_WORDSTAR_-def-frame .types__down-arrow:active": {
     transform: "translateY(2px);",
   },
-  ".-_WORDSTAR_-main-frame .definitions__left-arrow:active": {
+  ".-_WORDSTAR_-def-frame .definitions__left-arrow:active": {
     transform: "translateX(-2px);",
   },
-  ".-_WORDSTAR_-main-frame .definitions__right-arrow:active": {
+  ".-_WORDSTAR_-def-frame .definitions__right-arrow:active": {
     transform: "translateX(2px);",
   },
-  ".-_WORDSTAR_-main-frame button svg": {
+  ".-_WORDSTAR_-def-frame button svg": {
     outline: "none;",
     transition: "transform 0.15s linear;",
   },

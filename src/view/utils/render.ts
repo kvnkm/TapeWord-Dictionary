@@ -106,14 +106,14 @@ export default function render(element: HTMLElement): void {
     "definitions"
   )[0] as HTMLDivElement;
   switch (componentName) {
-    case "-_WORDSTAR_-main-frame":
+    case "-_WORDSTAR_-def-frame":
       // Inject frame into DOM
       const body: HTMLBodyElement = document.getElementsByTagName("body")[0];
       body.appendChild(element);
 
       // Add button-click event listeners
       const mainFrame: HTMLDivElement = document.getElementsByClassName(
-        "-_WORDSTAR_-main-frame"
+        "-_WORDSTAR_-def-frame"
       )[0] as HTMLDivElement;
       mainFrame.addEventListener("click", onArrowClick);
       break;
