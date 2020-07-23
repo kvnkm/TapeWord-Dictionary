@@ -1,4 +1,3 @@
-import render from "./render";
-import { upArrow, downArrow, leftArrow, rightArrow } from "./ArrowButton";
+import render from "./render/index";
 
-export { render, upArrow, downArrow, leftArrow, rightArrow };
+export { render };

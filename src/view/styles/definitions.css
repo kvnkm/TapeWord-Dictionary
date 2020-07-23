@@ -1,0 +1,103 @@
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("../fonts/IBMPlexMono-Regular.ttf");
+  font-weight: 500;
+  font-size: normal;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans Condensed";
+  src: url("../fonts/IBMPlexSansCondensed-Italic.ttf");
+  font-size: normal;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono Italic";
+  src: url("../fonts/IBMPlexMono-Italic.ttf");
+  font-weight: 600;
+  font-size: normal;
+}
+
+.definitionsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0;
+  margin: 0;
+}
+
+.definition {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 13px;
+  color: #000000;
+  padding: 0;
+  margin: 8px 0;
+}
+
+.example {
+  font-family: "IBM Plex Sans Condensed";
+  font-style: italic;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 13px;
+  color: #00000066;
+  padding: 0;
+  margin: 0;
+}
+
+.controlsContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 70px;
+  padding: 0;
+  margin: 3px 0;
+}
+
+:global(#W_O_R_D_STAR)
+  > .definitionsContainer
+  > .controlsContainer
+  .leftArrowContainer,
+:global(#W_O_R_D_STAR)
+  > .definitionsContainer
+  > .controlsContainer
+  .rightArrowContainer {
+  background: none;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  height: 18px;
+  width: 18px;
+}
+
+.leftArrowContainer:hover,
+.rightArrowContainer:hover,
+.leftArrowContainer:focus,
+.rightArrowContainer:focus {
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.leftArrowContainer svg,
+.rightArrowContainer svg {
+  outline: none;
+  transition: transform 0.15s linear;
+}
+
+.leftArrowContainer:hover svg,
+.rightArrowContainer:hover svg {
+  transform: scale(1.1);
+}
+
+.leftArrowContainer:active {
+  transform: translateX(-2px);
+}
+
+.rightArrowContainer:active {
+  transform: translateX(2px);
+}

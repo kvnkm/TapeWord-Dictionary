@@ -1,11 +1,11 @@
 const path = require("path");
 
 module.exports = {
-  mode: "development",
+  mode: "production",
   devtool: "source-map",
   entry: {
     background: "./src/background/index.ts",
-    contentScript: "./src/view/display.ts",
+    contentScript: "./src/view/index.ts",
   },
   module: {
     rules: [
@@ -13,6 +13,10 @@ module.exports = {
         test: /\.ts/,
         use: "ts-loader",
         include: [path.resolve(__dirname, "src")],
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
       },
     ],
   },

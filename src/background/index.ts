@@ -32,7 +32,7 @@ function abbreviate(term: string): string {
 }
 
 async function getDefRes(termString: string): Promise<Response> {
-  const endPoint: string = `https://cors-anywhere.herokuapp.com/https://www.lexico.com/en/definition/${termString}`;
+  const endPoint: string = `https://www.lexico.com/en/definition/${termString}`;
   const defRes: Response = await fetch(endPoint, fetchHeaders);
   return Promise.resolve(defRes);
 }
@@ -49,7 +49,7 @@ async function parseDefRes(defRes: Response): Promise<Definitions> {
 
   /**
    * If no exact matches for the term were found, check for nearest result then return that definition
-   * If there are no nearest results, then return empty object
+   * If there aren't any near-results, then return empty object.
    */
   const noMatchFound: Element | undefined = resDoc.querySelectorAll(
     "div.no-exact-matches"
@@ -58,7 +58,6 @@ async function parseDefRes(defRes: Response): Promise<Definitions> {
     "a.no-transition"
   )[0];
   if (nearestResult) {
-    console.log(nearestResult);
     const resultString: string = (nearestResult as HTMLAnchorElement).pathname.match(
       /\/definition\/(.*)/
     )![1];
@@ -69,43 +68,78 @@ async function parseDefRes(defRes: Response): Promise<Definitions> {
   const wordTypeSections: NodeListOf<Element> = resDoc.querySelectorAll(
     "section.gramb"
   );
-  // wordTypeSections.forEach((wordTypeSection) => {
+
+  /**
+   * (NORMAL DEFS) Each word-type's section ("section.gramb") will have a <ul> that houses normal defs in <li>s
+   *
+   * (ABNORMAL DEFS W/ OTHER NORMAL DEFS) For abnormal defs such as cross-references (e.g. "same") that are WITHIN A GROUP of
+   * other normal defs, there will be no <ul>s. Their text nodes are inside "div.crossReference"
+   *
+   * (ABNORMAL DEFS SOLO) For solo cross-references (e.g. "catsup"), their trees are normal, except- text nodes are inside "div.crossReference"
+   *  */
   for (const wordTypeSection of wordTypeSections) {
+    // Extract word type (e.g. noun, verb, adjective)
     const _wordType: string = (wordTypeSection.querySelectorAll(
       "h3.ps.pos > span.pos"
     )[0] as HTMLElement).innerText;
+
     if (!_wordType) continue;
     const wordType: string = abbreviate(_wordType);
     definitions[wordType] = {
       defs: [],
-    }; // FIXME
+    };
 
-    const definitionElements: NodeListOf<Element> = wordTypeSection.querySelectorAll(
+    /**
+     * Check if word type section contains <ul>, "span.ind", and/or "div.crossReference"
+     */
+    const liElements: NodeListOf<Element> = wordTypeSection.querySelectorAll(
       "ul.semb > li"
     );
-    definitionElements.forEach((defEl) => {
-      // Continue to next iteration if it's not a real definition
-      const listCheck: NodeListOf<Element> | [] = defEl.querySelectorAll(
-        "p > span.ind"
-      );
-      if (listCheck === undefined || listCheck.length == 0) return;
+    const regularDefEls: NodeListOf<Element> = wordTypeSection.querySelectorAll(
+      "p > span.ind"
+    );
+    const crossRefEls: NodeListOf<Element> = wordTypeSection.querySelectorAll(
+      "div.crossReference"
+    );
 
-      // Extract the definition and example strings
-      const def: string = (defEl.querySelectorAll(
-        "p > span.ind"
-      )[0] as HTMLSpanElement)["innerText"];
-      const exampleContainer = defEl.querySelectorAll("div.exg > div.ex")[0];
-      const example: string = exampleContainer
-        ? (exampleContainer as HTMLDivElement).innerText
-        : "";
-      const selected: Boolean = false;
-      const definition: Definition = { def, example, selected };
-      definitions[wordType].defs.push(definition);
-    });
+    if (!!liElements.length) {
+      if (!!regularDefEls.length) {
+        regularDefEls.forEach((rD, i) => {
+          // Extract normal definition & example if they exist
+          const def: string = (rD as HTMLSpanElement).innerText;
+          const exampleContainer = wordTypeSection.querySelectorAll(
+            "div.trg > div.exg > div.ex"
+          )[i];
+          const example: string = exampleContainer
+            ? (exampleContainer as HTMLDivElement).innerText
+            : "";
+          const definition: Definition = { def, example };
+          definitions[wordType].defs.push(definition);
+        });
+      } else if (!!crossRefEls.length) {
+        crossRefEls.forEach((cR) => {
+          // Extract cross-reference text
+          const def: string = (cR as HTMLDivElement).innerText;
+          const example = "";
+          const definition: Definition = { def, example };
+          definitions[wordType].defs.push(definition);
+        });
+      }
+    } else if (!!crossRefEls) {
+      crossRefEls.forEach((cR) => {
+        // Extract cross-reference text
+        const def: string = (cR as HTMLDivElement).innerText;
+        const example = "";
+        const definition: Definition = { def, example };
+        definitions[wordType].defs.push(definition);
+      });
+    }
   }
 
   return Promise.resolve(definitions);
 }
+
+// FIXME - add context menu only for actual terms (based on computed whitespace)
 
 browser.contextMenus.create({
   id: "WordStar-search",

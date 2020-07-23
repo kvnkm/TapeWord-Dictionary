@@ -112,7 +112,7 @@ function createSVG(arrowType: SvgArrow): SVGElement {
 
 const upArrowSpecs: SvgArrow = {
   id: "upArrow",
-  viewBox: "0 0 12 10",
+  viewBox: "2 0 8 9",
   g: {
     filter: "#filterUp",
   },
@@ -131,7 +131,7 @@ const upArrowSpecs: SvgArrow = {
 
 const downArrowSpecs: SvgArrow = {
   id: "downArrow",
-  viewBox: "0 0 12 10",
+  viewBox: "2 0 8 9",
   g: {
     filter: "#filterDown",
   },

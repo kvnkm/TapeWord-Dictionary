@@ -16,5 +16,5 @@
     }
   ],
 
-  "permissions": ["activeTab", "contextMenus"]
+  "permissions": ["activeTab", "contextMenus", "https://www.lexico.com/"]
 }

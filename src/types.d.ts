@@ -1,7 +1,6 @@
 export interface Definition {
   def: string;
   example: string;
-  selected: Boolean;
 }
 
 export interface Definitions {

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "webpack-dev-server",
+    "serve.bak": "webpack-dev-server --config=webpack.dev.js --open",
+    "serve": "NODE_ENV=development webpack --config webpack.dev.js --mode=development --watch ",
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,14 +20,17 @@
   },
   "homepage": "https://github.com/kvnkm/WordStar#readme",
   "devDependencies": {
+    "css-loader": "^3.6.0",
+    "css-modules-typescript-loader": "^4.0.0",
+    "style-loader": "^1.2.1",
     "ts-loader": "^7.0.5",
     "typescript": "^3.9.5",
+    "url-loader": "^4.1.0",
     "webextension-polyfill-ts": "^0.17.0",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "webpack-extension-reloader": "^1.1.4"
   },
-  "dependencies": {
-    "redux": "^4.0.5"
-  }
+  "dependencies": {}
 }
