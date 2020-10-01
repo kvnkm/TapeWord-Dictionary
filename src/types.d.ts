@@ -1,12 +1,12 @@
 export interface Definition {
   def: string;
   example: string;
+  scrolled?: boolean;
+  scrollable?: boolean;
 }
 
 export interface Definitions {
-  [wordType: string]: {
-    defs: Definition[];
-  };
+  [wordType: string]: Definition[];
 }
 
 export type State = Definitions[];
@@ -17,11 +17,15 @@ export interface Styles {
   };
 }
 
+export type Quadrant = "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
+
 export interface Listeners {
   [listener: string]: (event: Event) => void;
 }
 
-export type RenderType = "newType" | "newDefinition";
+export interface WordTypes extends HTMLTableSectionElement {
+  className: "gramb";
+}
 
 // export class Maybe<T> {
 //   protected constructor(private value: T | null) {}

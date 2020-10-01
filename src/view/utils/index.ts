@@ -1,3 +1,4 @@
-import render from "./render/index";
+import render from "./render";
+import addButtons from "./addButtons";
 
-export { render };
+export { render, addButtons };

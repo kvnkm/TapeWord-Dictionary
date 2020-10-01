@@ -18,86 +18,162 @@
   font-size: normal;
 }
 
-.definitionsContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 0;
-  margin: 0;
+/* FIXME
+ * Remove unnecessary rules
+*/
+:global(#W_O_R_D_STAR) > .definitionsContainer {
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative;
+  justify-content: space-evenly !important;
+  padding: 8px 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  scrollbar-width: none;
 }
 
-.definition {
-  font-family: "IBM Plex Mono";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 13px;
-  color: #000000;
-  padding: 0;
-  margin: 8px 0;
+:global(#W_O_R_D_STAR) > .definitionsContainer > .textContainer {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  padding: 8px 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  width: 100% !important;
+  white-space: nowrap !important;
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
 }
 
-.example {
-  font-family: "IBM Plex Sans Condensed";
-  font-style: italic;
-  font-weight: 600;
-  font-size: 15px;
-  line-height: 13px;
-  color: #00000066;
-  padding: 0;
-  margin: 0;
+:global(#W_O_R_D_STAR) > .definitionsContainer > .textContainer > .definition {
+  font-family: "IBM Plex Mono", "Courier New" !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  line-height: 13px !important;
+  color: #000000 !important;
+  /* padding: 0 !important; */
+  margin: 0 !important;
+  border: none !important;
 }
 
-.controlsContainer {
-  display: flex;
-  justify-content: space-between;
-  width: 70px;
-  padding: 0;
-  margin: 3px 0;
+:global(#W_O_R_D_STAR) > .definitionsContainer > .textContainer > .example {
+  font-family: "IBM Plex Mono", "Courier New" !important;
+  font-style: italic !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  line-height: 13px !important;
+  color: #0000008e !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+}
+
+:global(#W_O_R_D_STAR) > .definitionsContainer > .controlsContainer {
+  display: flex !important;
+  justify-content: space-between !important;
+  width: 70px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  line-height: normal !important;
+  font-style: normal !important;
+  font-size: initial !important;
+  /* font-family: initial !important; */
+}
+
+:global(#W_O_R_D_STAR) > .definitionsContainer > .blur {
+  position: absolute !important;
+  align-self: end !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  width: 50px !important;
+  height: 100% !important;
+  border-radius: 0px 5px 5px 5px !important;
+  content: "" !important;
+  background: linear-gradient(to right, #ffffff00 0%, #76f7df 65%) !important;
 }
 
 :global(#W_O_R_D_STAR)
   > .definitionsContainer
   > .controlsContainer
-  .leftArrowContainer,
+  > .leftArrowContainer,
 :global(#W_O_R_D_STAR)
   > .definitionsContainer
   > .controlsContainer
-  .rightArrowContainer {
-  background: none;
-  padding: 0;
-  border: none;
-  box-shadow: none;
-  cursor: pointer;
-  height: 18px;
-  width: 18px;
+  > .rightArrowContainer {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  height: 15px !important;
+  line-height: 0px !important;
+  min-height: 0px !important;
+  width: 15px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
 }
 
-.leftArrowContainer:hover,
-.rightArrowContainer:hover,
-.leftArrowContainer:focus,
-.rightArrowContainer:focus {
-  background: none;
-  border: none;
-  outline: none;
+:global(#W_O_R_D_STAR)
+  > .definitionsContainer
+  > .controlsContainer
+  > .leftArrowContainer:hover,
+:global(#W_O_R_D_STAR)
+  > .definitionsContainer
+  > .controlsContainer
+  > .rightArrowContainer:hover,
+:global(#W_O_R_D_STAR)
+  > .definitionsContainer
+  > .controlsContainer
+  > .leftArrowContainer:focus,
+:global(#W_O_R_D_STAR)
+  > .definitionsContainer
+  > .controlsContainer
+  > .rightArrowContainer:focus {
+  background: none !important;
+  border: none !important;
+  outline: none !important;
 }
 
-.leftArrowContainer svg,
-.rightArrowContainer svg {
-  outline: none;
-  transition: transform 0.15s linear;
+:global(#W_O_R_D_STAR)
+  > .definitionsContainer
+  > .controlsContainer
+  > .leftArrowContainer
+  svg,
+:global(#W_O_R_D_STAR)
+  > .definitionsContainer
+  > .controlsContainer
+  > .rightArrowContainer
+  svg {
+  outline: none !important;
+  transition: transform 0.007s linear !important;
 }
 
-.leftArrowContainer:hover svg,
-.rightArrowContainer:hover svg {
-  transform: scale(1.1);
+:global(#W_O_R_D_STAR)
+  > .definitionsContainer
+  > .controlsContainer
+  > .leftArrowContainer:hover
+  svg,
+:global(#W_O_R_D_STAR)
+  > .definitionsContainer
+  > .controlsContainer
+  > .rightArrowContainer:hover
+  svg {
+  transform: scale(1.4) !important;
 }
 
-.leftArrowContainer:active {
-  transform: translateX(-2px);
+:global(#W_O_R_D_STAR)
+  > .definitionsContainer
+  > .controlsContainer
+  > .leftArrowContainer:active {
+  transform: translateX(-2px) !important;
 }
 
-.rightArrowContainer:active {
-  transform: translateX(2px);
+:global(#W_O_R_D_STAR)
+  > .definitionsContainer
+  > .controlsContainer
+  > .rightArrowContainer:active {
+  transform: translateX(2px) !important;
 }

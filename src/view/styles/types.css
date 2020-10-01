@@ -5,59 +5,69 @@
   font-size: normal;
 }
 
-.typesContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  margin: 0;
-  width: 75px;
+:global(#W_O_R_D_STAR) > .typesContainer {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: space-evenly !important;
+  width: 75px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
 }
 
-.typesLabel {
-  font-family: "IBM Plex Mono";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 0.6;
+:global(#W_O_R_D_STAR) > .typesContainer > .typesLabel {
+  font-family: "IBM Plex Mono", "Courier New" !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 18px !important;
+  line-height: 0.6 !important;
+  padding: 0 !important;
+  margin: 0 0 5px 0 !important;
+  border: none !important;
 }
 
 :global(#W_O_R_D_STAR) > .typesContainer > .upArrowContainer,
 :global(#W_O_R_D_STAR) > .typesContainer > .downArrowContainer {
-  background: none;
-  padding: 0;
-  border: none;
-  box-shadow: none;
-  cursor: pointer;
-  height: 12px;
-  width: 12px;
+  background: none !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  height: 12px !important;
+  width: 12px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  line-height: 0px !important;
+  min-height: 0px !important;
+  font-style: normal !important;
+  font-size: 0 !important;
+  font-family: initial !important;
 }
 
-.upArrowContainer:hover,
-.downArrowContainer:hover,
-.upArrowContainer:focus,
-.downArrowContainer:focus {
-  background: none;
-  border: none;
-  outline: none;
+:global(#W_O_R_D_STAR) > .typesContainer > .upArrowContainer:hover,
+:global(#W_O_R_D_STAR) > .typesContainer > .downArrowContainer:hover,
+:global(#W_O_R_D_STAR) > .typesContainer > .upArrowContainer:focus,
+:global(#W_O_R_D_STAR) > .typesContainer > .downArrowContainer:focus {
+  background: none !important;
+  border: none !important;
+  outline: none !important;
 }
 
-.upArrowContainer svg,
-.downArrowContainer svg {
-  outline: none;
-  transition: transform 0.007s linear;
+:global(#W_O_R_D_STAR) > .typesContainer > .upArrowContainer svg,
+:global(#W_O_R_D_STAR) > .typesContainer > .downArrowContainer svg {
+  outline: none !important;
+  transition: transform 0.007s linear !important;
 }
 
-.upArrowContainer:hover svg,
-.downArrowContainer:hover svg {
-  transform: scale(1.1);
+:global(#W_O_R_D_STAR) > .typesContainer > .upArrowContainer:hover svg,
+:global(#W_O_R_D_STAR) > .typesContainer > .downArrowContainer:hover svg {
+  transform: scale(1.3) !important;
 }
 
-.upArrowContainer:active {
-  transform: translateY(-2px);
+:global(#W_O_R_D_STAR) > .typesContainer > .upArrowContainer:active {
+  transform: translateY(-2px) !important;
 }
 
-.downArrowContainer:active {
-  transform: translateY(2px);
+:global(#W_O_R_D_STAR) > .typesContainer > .downArrowContainer:active {
+  transform: translateY(2px) !important;
 }

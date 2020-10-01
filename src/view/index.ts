@@ -1,53 +1,55 @@
 import { browser } from "webextension-polyfill-ts";
-import { Definitions, Definition, State } from "../types";
-import { render } from "./utils";
-import { typesContainer, definitionsContainer } from "./components";
+import { Definitions, Definition, Quadrant, State } from "../types";
+import { render, addButtons } from "./utils";
+import * as Components from "./components";
 import frameStyles from "./styles/frame.css";
 import typeStyles from "./styles/types.css";
 import defStyles from "./styles/definitions.css";
 
-/*
- * () Determine definition-box dimensions
- *     - Max-content the width and height if possible to do so without hitting window edges
- *       - Else- expand towards the edge(s) and leave buffer(s) of 50px
- *             - enable overflows
- * () Determine placement
- *     - Utilize window.innerWidth & window.innerHeight
- *     - Create four placement-helper-functions for dynamic placements around DOMRects (eg. placeBelowRight, placeBelowLeft, placeAboveRight, placeAboveLeft)
- *       - Always call placeBelowRight unless:
- *         - There's no space for the element below - then call placeAboveRight
- *         - There's no space for the element both below and to the right - then call placeAboveLeft
+/**
+ * STRETCH FEATS
+ *
+ * Animations
+ * Frosted-glass effect on frame
  */
 
-// FIXME - Bypass Github's external-fonts-blocking CSP
+let selectionBox: DOMRect | undefined = undefined;
 
-browser.runtime.onMessage.addListener((defs) => {
-  // Get body & head elements
-  const body: HTMLBodyElement = document.getElementsByTagName("body")[0];
-
-  if (!defs) {
-    renderErrorFrame(body);
-
-    /** Track mouse-down to enable user to begin a click
-     * (mousedown) inside a frame, drag, and finish the click
-     * (mouseup) outside the frame without frame deletion */
-    document.addEventListener("mousedown", handleMouseEvents);
-    document.addEventListener("mouseup", handleMouseEvents);
+browser.runtime.onMessage.addListener((msg) => {
+  if (msg === "getSelectionBox") {
+    selectionBox = window.getSelection()?.getRangeAt(0).getBoundingClientRect();
   } else {
-    // Set state and retrieve first set of defs
-    state = defs;
-    const definitions: Definitions = state[0];
-    // Generate and populate frame based on state: Event
-    const frameSkeleton: HTMLDivElement = generateSkeleton(
-      typesContainer,
-      definitionsContainer
-    );
+    // Calculate max-width based on quadrant
+    const quadrant = getQuadrant(selectionBox!);
+    const maxWidth: number = getMaxWidth(quadrant, selectionBox!);
 
-    const frame: HTMLDivElement = populateFrame(frameSkeleton, definitions);
-    // Execute first render
-    render(frame);
-    document.addEventListener("mousedown", handleMouseEvents);
-    document.addEventListener("mouseup", handleMouseEvents);
+    if (!msg) {
+      // Render error frame if term not found
+      const nullFrame: HTMLElement = generateNullFrame();
+      render(nullFrame, selectionBox, quadrant);
+
+      document.addEventListener("mousedown", handleMouseEvents);
+      document.addEventListener("mouseup", handleMouseEvents);
+    } else {
+      // Set state and retrieve first set of defs
+      state = msg;
+      const definitions: Definitions = state[0];
+
+      // Generate and populate frame based on state
+      const frameSkeleton: HTMLElement = createFrame(
+        state,
+        Components,
+        quadrant,
+        maxWidth
+      );
+      const frame: HTMLElement = populateFrame(frameSkeleton, definitions);
+
+      // Execute first render
+      render(frame, selectionBox, quadrant);
+
+      document.addEventListener("mousedown", handleMouseEvents);
+      document.addEventListener("mouseup", handleMouseEvents);
+    }
   }
 });
 
@@ -60,29 +62,47 @@ browser.runtime.onMessage.addListener((defs) => {
 ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝    ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝                                                                                        
  */
 
-// FIXME - Modularize state
 let state: State;
-export function getState() {
+export function getState(): State {
   return state;
 }
 
 // Declare mouse-down tracker
 let isPointerDragged: boolean = false;
 
-function renderErrorFrame(body: HTMLBodyElement) {
-  const nullFrame: HTMLDivElement = generateNullFrame();
-  body.appendChild(nullFrame);
+function getQuadrant(selectionBox: DOMRect): Quadrant {
+  const { x, y } = selectionBox!;
+  const borderX: number = window.innerWidth * 0.75;
+  const borderY: number = window.innerHeight - 80;
+  if (x <= borderX && y <= borderY) return "topLeft";
+  if (x > borderX && y <= borderY) return "topRight";
+  if (x <= borderX && y > borderY) return "bottomLeft";
+  if (x > borderX && y > borderY) return "bottomRight";
+  // Default quadrant
+  return "topLeft";
 }
 
-function injectStyling(css: string, head: HTMLElement): void {
-  const style: HTMLStyleElement = document.createElement("style");
-  style.type = "text/css";
-  style.appendChild(document.createTextNode(css));
-  head.appendChild(style);
+function getMaxWidth(quadrant: Quadrant, selectionBox: DOMRect) {
+  const clientWidth = document.body.clientWidth;
+  switch (quadrant) {
+    case "bottomRight":
+    case "topRight": {
+      const right: number = document.body.clientWidth - selectionBox!.right;
+      return clientWidth - right - 100;
+    }
+    case "bottomLeft":
+    case "topLeft": {
+      return clientWidth - selectionBox!.left - 100;
+    }
+    default:
+      throw new Error(
+        "WORDSTAR Error: Could not calculate max-with based on quadrant"
+      );
+  }
 }
 
-function generateNullFrame(): HTMLDivElement {
-  const nullFrame: HTMLDivElement = document.createElement("div");
+function generateNullFrame(): HTMLElement {
+  const nullFrame: HTMLElement = document.createElement("div");
   const nullMessage: HTMLParagraphElement = document.createElement("p");
   nullFrame.className = frameStyles.nullFrame;
   nullMessage.innerText = "No definition found :(";
@@ -90,28 +110,68 @@ function generateNullFrame(): HTMLDivElement {
   return nullFrame;
 }
 
-function generateSkeleton(
-  typesContainer: HTMLDivElement,
-  definitionsContainer: HTMLDivElement
-): HTMLDivElement {
-  const frame: HTMLDivElement = document.createElement("div");
+function createFrame(
+  state: State,
+  Components: {
+    [c: string]: HTMLElement;
+  },
+  quadrant: Quadrant,
+  maxDefWidth: number
+): HTMLElement {
+  // Add arrow-buttons
+  // // To typesContainer if there's more than one wordType
+  let typesContainer: HTMLElement = Components.typesContainer.cloneNode(
+    true
+  ) as HTMLElement;
+  typesContainer = addButtons(typesContainer);
+
+  // // To definitionsContainer if there's more than one Definition
+  let definitionsContainer: HTMLElement = Components.definitionsContainer.cloneNode(
+    true
+  ) as HTMLElement;
+  const wordType: string = Object.keys(state[0])[0];
+  const defEl: HTMLParagraphElement = definitionsContainer.childNodes[0]
+    .childNodes[0] as HTMLParagraphElement;
+  definitionsContainer = addButtons(definitionsContainer);
+  if (state[0][wordType].length > 1) {
+    // Add padding-bottom to the definition element for style
+    defEl.style.paddingBottom = "4px";
+  } else {
+    defEl.style.paddingBottom = "8px";
+  }
+
+  // Set max definitions container width
+  definitionsContainer.style.maxWidth = maxDefWidth + "px";
+
+  const frame: HTMLElement = document.createElement("div");
   frame.className = frameStyles.defFrame;
   frame.id = "W_O_R_D_STAR";
 
-  frame.appendChild(typesContainer);
-  frame.appendChild(definitionsContainer);
+  if (quadrant === "bottomLeft" || quadrant === "topLeft") {
+    definitionsContainer.style.setProperty(
+      "padding-right",
+      "17px",
+      "important"
+    );
+    frame.appendChild(typesContainer);
+    frame.appendChild(definitionsContainer);
+  } else {
+    const textContainer: HTMLElement = definitionsContainer
+      .childNodes[0] as HTMLElement;
+    definitionsContainer.style.setProperty("padding-left", "17px", "important");
+    definitionsContainer.style.alignItems = "flex-end";
+    textContainer.style.alignItems = "flex-end";
+    frame.appendChild(definitionsContainer);
+    frame.appendChild(typesContainer);
+  }
 
   return frame;
 }
 
-function populateFrame(
-  frameSkeleton: HTMLDivElement,
-  definitions: Definitions
-) {
-  //
-  const frame: HTMLDivElement = frameSkeleton.cloneNode(true) as HTMLDivElement;
+function populateFrame(frameSkeleton: HTMLElement, definitions: Definitions) {
+  const frame: HTMLElement = frameSkeleton.cloneNode(true) as HTMLElement;
   const [wordType]: string[] = Object.keys(definitions);
-  const defObj: Definition = definitions[wordType].defs[0];
+  const defObj: Definition = definitions[wordType][0];
   const def: string = defObj.def;
   const example: string = defObj.example;
   const wordTypeEl: HTMLHeadingElement = frame.getElementsByClassName(
@@ -130,6 +190,13 @@ function populateFrame(
   return frame;
 }
 
+/**
+ * MOUSE-CLICK LOGIC
+ *
+ * Track mouse-down to enable user to begin a click
+ * (mousedown) inside a frame, drag, and finish the click
+ * (mouseup) outside the frame without frame deletion
+ * */
 function handleMouseEvents(e: Event) {
   const eventType: string = e.type;
   const targetEl: EventTarget = e.target!;
@@ -148,7 +215,13 @@ function handleMouseEvents(e: Event) {
         const frame: HTMLElement = document.getElementsByClassName(
           frameStyles.frame
         )[0] as HTMLElement;
-        body.removeChild(frame);
+
+        const lastChild: HTMLElement = body.lastChild as HTMLElement;
+        if (lastChild.id === "W_O_R_D_STAR") {
+          body.removeChild(lastChild);
+        } else {
+          body.removeChild(frame);
+        }
       } else {
         isPointerDragged = false;
       }

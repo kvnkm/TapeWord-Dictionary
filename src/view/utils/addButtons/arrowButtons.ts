@@ -150,7 +150,7 @@ const downArrowSpecs: SvgArrow = {
 
 const leftArrowSpecs: SvgArrow = {
   id: "leftArrow",
-  viewBox: "0 0 9 13",
+  viewBox: "0 0 7 12.5",
   g: {
     filter: "#filterLeft",
   },
@@ -169,7 +169,7 @@ const leftArrowSpecs: SvgArrow = {
 
 const rightArrowSpecs: SvgArrow = {
   id: "rightArrow",
-  viewBox: "0 0 9 13",
+  viewBox: "0 0 7 12.5",
   g: {
     filter: "#filterRight",
   },
