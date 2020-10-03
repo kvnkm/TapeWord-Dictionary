@@ -16,7 +16,25 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"],
+        use: [
+          {
+            loader: "style-loader",
+            options: {
+              esModule: true,
+            },
+          },
+          "css-modules-typescript-loader",
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        use: ["url-loader"],
       },
     ],
   },

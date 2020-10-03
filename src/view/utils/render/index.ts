@@ -1,5 +1,5 @@
 import { State, Definition, Definitions, Quadrant } from "../../../types";
-import { getState } from "../../../view";
+import { getState, getQuadrant } from "../../../view";
 import frameStyles from "../../styles/frame.css";
 import typeStyles from "../../styles/types.css";
 import defStyles from "../../styles/definitions.css";
@@ -27,6 +27,9 @@ export default function render(
     definitionsContainer.addEventListener("wheel", onDefScroll);
   }
 
+  // Align flex-end if textContainer is NOT scrollable and the quadrant is on the right side
+  handleAlignment();
+
   // Blur the text if needed
   handleBlur("newDef");
 
@@ -43,6 +46,23 @@ function getDOMComponent(cssType: string): HTMLElement {
     cssType
   );
   return componentCollection[componentCollection.length - 1] as HTMLElement;
+}
+
+/**
+ * Aligns textContainer to flex-end if:
+ *    - quadrant is on the Right side
+ *    - textContainer is NOT scrollable
+ */
+function handleAlignment(): void {
+  const quadrant: Quadrant = getQuadrant();
+  const textContainer: HTMLElement = getDOMComponent(defStyles.textContainer);
+
+  if (
+    (quadrant === "topRight" || quadrant === "bottomRight") &&
+    !(textContainer.offsetWidth < textContainer.scrollWidth)
+  ) {
+    textContainer.style.alignItems = "flex-end";
+  }
 }
 
 function handleArrows(): void {
@@ -220,13 +240,13 @@ function onDefScroll(e: WheelEvent) {
   const delta: number = e.deltaX || e.deltaY;
   const textContainer: HTMLElement = getDOMComponent(defStyles.textContainer);
   textContainer.scrollLeft -= delta * -10;
-  console.log(" ");
-  console.log("scrollLeft");
-  console.log(textContainer.scrollLeft);
-  console.log("scrollWidth");
-  console.log(textContainer.scrollWidth);
-  console.log("offsetWidth");
-  console.log(textContainer.offsetWidth);
+  // console.log(" ");
+  // console.log("scrollLeft");
+  // console.log(textContainer.scrollLeft);
+  // console.log("scrollWidth");
+  // console.log(textContainer.scrollWidth);
+  // console.log("offsetWidth");
+  // console.log(textContainer.offsetWidth);
   handleBlur("scroll");
 }
 
@@ -249,9 +269,13 @@ function refresh(
   newType?: boolean
 ): void {
   // Add or remove arrows from definitionContainer based on defs.length
-  let definitionsContainer: HTMLElement = getDOMComponent(
+  const definitionsContainer: HTMLElement = getDOMComponent(
     defStyles.definitionsContainer
   );
+
+  // Reset textContainer alignment
+  const textContainer: HTMLElement = getDOMComponent(defStyles.textContainer);
+  textContainer.style.alignItems = "start";
 
   // Assign new strings to definition & example elements
   const defEl: HTMLElement = definitionsContainer.getElementsByClassName(
@@ -262,6 +286,9 @@ function refresh(
   )[0] as HTMLElement;
   defEl.innerText = newStrings.defString;
   exampleEl.innerText = newStrings.exampleString;
+
+  // Align flex-end if textContainer is NOT scrollable and the quadrant is on the right side
+  handleAlignment();
 
   // Blur the text if needed
   handleBlur("newDef");

@@ -1,8 +1,6 @@
 export interface Definition {
   def: string;
   example: string;
-  scrolled?: boolean;
-  scrollable?: boolean;
 }
 
 export interface Definitions {

@@ -13,14 +13,23 @@ import defStyles from "./styles/definitions.css";
  * Frosted-glass effect on frame
  */
 
+/**
+ * FIXME
+ *
+ * (Open a fresh page by clicking a link), (Define gibberish) - Null frame will not disappear on external-click, error states that "textContainer is undefined"
+ */
+
 let selectionBox: DOMRect | undefined = undefined;
+let state: State;
+let quadrant: Quadrant | null = null;
+let isPointerDragged: boolean = false;
 
 browser.runtime.onMessage.addListener((msg) => {
   if (msg === "getSelectionBox") {
     selectionBox = window.getSelection()?.getRangeAt(0).getBoundingClientRect();
   } else {
     // Calculate max-width based on quadrant
-    const quadrant = getQuadrant(selectionBox!);
+    quadrant = calcQuadrant(selectionBox!);
     const maxWidth: number = getMaxWidth(quadrant, selectionBox!);
 
     if (!msg) {
@@ -62,15 +71,15 @@ browser.runtime.onMessage.addListener((msg) => {
 ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝    ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝                                                                                        
  */
 
-let state: State;
 export function getState(): State {
   return state;
 }
 
-// Declare mouse-down tracker
-let isPointerDragged: boolean = false;
+export function getQuadrant(): Quadrant {
+  return quadrant!;
+}
 
-function getQuadrant(selectionBox: DOMRect): Quadrant {
+function calcQuadrant(selectionBox: DOMRect): Quadrant {
   const { x, y } = selectionBox!;
   const borderX: number = window.innerWidth * 0.75;
   const borderY: number = window.innerHeight - 80;
@@ -156,11 +165,8 @@ function createFrame(
     frame.appendChild(typesContainer);
     frame.appendChild(definitionsContainer);
   } else {
-    const textContainer: HTMLElement = definitionsContainer
-      .childNodes[0] as HTMLElement;
     definitionsContainer.style.setProperty("padding-left", "17px", "important");
     definitionsContainer.style.alignItems = "flex-end";
-    textContainer.style.alignItems = "flex-end";
     frame.appendChild(definitionsContainer);
     frame.appendChild(typesContainer);
   }
