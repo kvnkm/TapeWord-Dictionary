@@ -1,6 +1,12 @@
 import { browser } from "webextension-polyfill-ts";
 import { Definitions, Definition, Quadrant, State } from "../types";
-import { render, addButtons, handleArrows, handleAlignment } from "./utils";
+import {
+  render,
+  addButtons,
+  handleArrows,
+  handleAlignment,
+  placeFrame,
+} from "./utils";
 import * as Components from "./components";
 import frameStyles from "./styles/frame.css";
 import typeStyles from "./styles/types.css";
@@ -35,7 +41,7 @@ browser.runtime.onMessage.addListener((msg) => {
     if (!msg) {
       // Render error frame if term not found
       const nullFrame: HTMLElement = generateNullFrame();
-      render(nullFrame, selectionBox, quadrant);
+      placeFrame(nullFrame, selectionBox!, quadrant);
 
       document.addEventListener("mousedown", handleMouseEvents);
       document.addEventListener("mouseup", handleMouseEvents);

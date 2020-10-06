@@ -1,5 +1,5 @@
 import { State, Definition, Definitions, Quadrant } from "../../../types";
-import { getState, getQuadrant } from "../../../view";
+import { getState } from "../../../view";
 import frameStyles from "../../styles/frame.css";
 import typeStyles from "../../styles/types.css";
 import defStyles from "../../styles/definitions.css";
@@ -177,7 +177,7 @@ function handleBlur(type: "newDef" | "scroll") {
   }
 }
 
-function placeFrame(
+export function placeFrame(
   element: HTMLElement,
   selectionBox: DOMRect,
   quadrant: Quadrant
