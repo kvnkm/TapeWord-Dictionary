@@ -15,6 +15,7 @@ import defStyles from "./styles/definitions.css";
 /**
  * STRETCH FEATS
  *
+ * Audio pronunciations
  * Animations
  * Frosted-glass effect on frame
  */
@@ -118,10 +119,8 @@ function getMaxWidth(quadrant: Quadrant, selectionBox: DOMRect) {
 
 function generateNullFrame(): HTMLElement {
   const nullFrame: HTMLElement = document.createElement("div");
-  const nullMessage: HTMLParagraphElement = document.createElement("p");
   nullFrame.className = frameStyles.nullFrame;
-  nullMessage.innerText = "No definition found :(";
-  nullFrame.appendChild(nullMessage);
+  nullFrame.innerText = "No definition found :(";
   return nullFrame;
 }
 

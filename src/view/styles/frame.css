@@ -22,10 +22,15 @@
 
 .nullFrame {
   composes: frame !important;
+  display: flex !important;
+  align-items: center !important;
   font-family: "IBM Plex Mono", "Courier New" !important;
   font-weight: 800 !important;
   font-size: 15px !important;
   line-height: 13px !important;
+  height: 60px !important;
+  padding: 20px !important;
+  margin: 0px !important;
   background: rgba(247, 118, 157) !important;
 }
 
