@@ -120,7 +120,7 @@ function getMaxWidth(quadrant: Quadrant, selectionBox: DOMRect) {
 function generateNullFrame(): HTMLElement {
   const nullFrame: HTMLElement = document.createElement("div");
   nullFrame.className = frameStyles.nullFrame;
-  nullFrame.innerText = "No definition found :(";
+  nullFrame.innerText = "No definition found 🙈";
   return nullFrame;
 }
 
