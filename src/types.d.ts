@@ -7,7 +7,7 @@ export interface Definitions {
   [wordType: string]: Definition[];
 }
 
-export type State = Definitions[];
+export type State = Definitions[][];
 
 export interface Styles {
   [selector: string]: {

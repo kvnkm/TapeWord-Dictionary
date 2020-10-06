@@ -12,16 +12,18 @@ export default function render(
   placeFrame(element, selectionBox!, quadrant!);
 
   // Add button-click event listeners
-  const frame: HTMLElement = getDOMComponent(frameStyles.frame);
+  const frame: HTMLElement = getComponent(frameStyles.frame, 1);
   frame.addEventListener("click", onArrowClick);
 
   if (element.className === frameStyles.defFrame) {
     // Add scroll event listeners
-    const definitionsContainer: HTMLElement = getDOMComponent(
-      defStyles.definitionsContainer
+    const definitionsContainer: HTMLElement = getComponent(
+      defStyles.definitionsContainer,
+      1
     );
-    const typesContainer: HTMLElement = getDOMComponent(
-      typeStyles.typesContainer
+    const typesContainer: HTMLElement = getComponent(
+      typeStyles.typesContainer,
+      1
     );
     typesContainer.addEventListener("wheel", onTypeScroll);
     definitionsContainer.addEventListener("wheel", onDefScroll);
@@ -38,45 +40,58 @@ export default function render(
 }
 
 /**
- * Retrieves the latest instance of a given component (in case there are nested WordStar frames)
+ * Retrieves the nth instance of a given component (in case there are nested WordStar frames)
  * @param cssType {string} CSS Modules hash
  */
-function getDOMComponent(cssType: string): HTMLElement {
+function getComponent(cssType: string, order: number): HTMLElement {
   const componentCollection: HTMLCollectionOf<Element> = document.getElementsByClassName(
     cssType
   );
-  return componentCollection[componentCollection.length - 1] as HTMLElement;
+  return componentCollection[componentCollection.length - order] as HTMLElement;
 }
 
 /**
  * Aligns textContainer to flex-end if:
- *    - quadrant is on the Right side
+ *    - frame direction is "left"
  *    - textContainer is NOT scrollable
  */
-function handleAlignment(): void {
-  const quadrant: Quadrant = getQuadrant();
-  const textContainer: HTMLElement = getDOMComponent(defStyles.textContainer);
+export function handleAlignment(): void {
+  const frame: HTMLElement = getComponent(frameStyles.frame, 1);
+  const frameDirection = ((frame: HTMLElement): "left" | "right" => {
+    const firstElement = frame.children[0];
+    if (firstElement.className === typeStyles.typesContainer) {
+      return "right";
+    } else {
+      return "left";
+    }
+  })(frame);
+
+  const textContainer: HTMLElement = getComponent(defStyles.textContainer, 1);
 
   if (
-    (quadrant === "topRight" || quadrant === "bottomRight") &&
+    frameDirection === "left" &&
     !(textContainer.offsetWidth < textContainer.scrollWidth)
   ) {
     textContainer.style.alignItems = "flex-end";
+  } else {
+    textContainer.style.alignItems = "start";
   }
 }
 
-function handleArrows(): void {
+export function handleArrows(): void {
   const state: State = getState();
-  const wordType: string = Object.keys(state[0])[0];
+  const wordType: string = Object.keys(state[state.length - 1][0])[0];
 
   // typesContainer
-  const upArrowContainer: HTMLElement = getDOMComponent(
-    typeStyles.upArrowContainer
+  let upArrowContainer: HTMLElement = getComponent(
+    typeStyles.upArrowContainer,
+    1
   );
-  const downArrowContainer: HTMLElement = getDOMComponent(
-    typeStyles.downArrowContainer
+  let downArrowContainer: HTMLElement = getComponent(
+    typeStyles.downArrowContainer,
+    1
   );
-  if (state.length <= 1) {
+  if (state[state.length - 1].length <= 1) {
     // remove buttons from typesContainer
     upArrowContainer.style.visibility = "hidden";
     downArrowContainer.style.visibility = "hidden";
@@ -86,19 +101,34 @@ function handleArrows(): void {
   }
 
   // definitionsContainer
-  const controlsContainer: HTMLElement = getDOMComponent(
-    defStyles.controlsContainer
+  let controlsContainer: HTMLElement = getComponent(
+    defStyles.controlsContainer,
+    1
   );
-  if (state[0][wordType].length <= 1) {
+  if (state[state.length - 1][0][wordType].length <= 1) {
     controlsContainer.style.visibility = "hidden";
   } else {
     controlsContainer.style.visibility = "visible";
   }
+
+  ///////
+
+  // Hide arrows of previous frame if new frame is created
+  if (state.length > 1) {
+    upArrowContainer = getComponent(typeStyles.upArrowContainer, 2);
+    downArrowContainer = getComponent(typeStyles.downArrowContainer, 2);
+    controlsContainer = getComponent(defStyles.controlsContainer, 2);
+
+    upArrowContainer.style.visibility = "hidden";
+    downArrowContainer.style.visibility = "hidden";
+    controlsContainer.style.visibility = "hidden";
+  }
 }
 
 function handleBlur(type: "newDef" | "scroll") {
-  const definitionsContainer: HTMLElement = getDOMComponent(
-    defStyles.definitionsContainer
+  const definitionsContainer: HTMLElement = getComponent(
+    defStyles.definitionsContainer,
+    1
   );
   const textContainer: HTMLElement = definitionsContainer
     .childNodes[0] as HTMLElement;
@@ -238,15 +268,9 @@ function placeFrame(
 function onDefScroll(e: WheelEvent) {
   e.preventDefault();
   const delta: number = e.deltaX || e.deltaY;
-  const textContainer: HTMLElement = getDOMComponent(defStyles.textContainer);
+  const textContainer: HTMLElement = getComponent(defStyles.textContainer, 1);
   textContainer.scrollLeft -= delta * -10;
-  // console.log(" ");
-  // console.log("scrollLeft");
-  // console.log(textContainer.scrollLeft);
-  // console.log("scrollWidth");
-  // console.log(textContainer.scrollWidth);
-  // console.log("offsetWidth");
-  // console.log(textContainer.offsetWidth);
+
   handleBlur("scroll");
 }
 
@@ -269,12 +293,13 @@ function refresh(
   newType?: boolean
 ): void {
   // Add or remove arrows from definitionContainer based on defs.length
-  const definitionsContainer: HTMLElement = getDOMComponent(
-    defStyles.definitionsContainer
+  const definitionsContainer: HTMLElement = getComponent(
+    defStyles.definitionsContainer,
+    1
   );
 
   // Reset textContainer alignment
-  const textContainer: HTMLElement = getDOMComponent(defStyles.textContainer);
+  const textContainer: HTMLElement = getComponent(defStyles.textContainer, 1);
   textContainer.style.alignItems = "start";
 
   // Assign new strings to definition & example elements
@@ -298,7 +323,7 @@ function refresh(
 
   if (newType) {
     // Re-render types components
-    const typesLabel: HTMLElement = getDOMComponent(typeStyles.typesLabel);
+    const typesLabel: HTMLElement = getComponent(typeStyles.typesLabel, 1);
     typesLabel.innerText = newStrings.wordType;
   }
 }
@@ -314,10 +339,10 @@ function onArrowClick(e: Event): void {
     case "upArrow":
       {
         // Rotate state forwards
-        const stateHead: Definitions = state.pop()!;
-        state.unshift(stateHead);
+        const stateHead: Definitions = state[state.length - 1].pop()!;
+        state[state.length - 1].unshift(stateHead);
 
-        refresh(getNewStrings(state[0]), true);
+        refresh(getNewStrings(state[state.length - 1][0]), true);
       }
       break;
     case typeStyles.downArrowContainer:
@@ -325,10 +350,10 @@ function onArrowClick(e: Event): void {
     case "downArrow":
       {
         // Rotate state backwards
-        const stateTail: Definitions = state.shift()!;
-        state.push(stateTail);
+        const stateTail: Definitions = state[state.length - 1].shift()!;
+        state[state.length - 1].push(stateTail);
 
-        refresh(getNewStrings(state[0]), true);
+        refresh(getNewStrings(state[state.length - 1][0]), true);
       }
       break;
     case defStyles.leftArrowContainer:
@@ -336,24 +361,24 @@ function onArrowClick(e: Event): void {
     case "leftArrow":
       {
         // Rotate state[wordType] array forwards
-        const wordType: string = Object.keys(state[0])[0];
-        const defs: Definition[] = state[0][wordType];
+        const wordType: string = Object.keys(state[state.length - 1][0])[0];
+        const defs: Definition[] = state[state.length - 1][0][wordType];
         const defsHead: Definition = defs.pop()!;
         defs.unshift(defsHead);
 
-        refresh(getNewStrings(state[0]));
+        refresh(getNewStrings(state[state.length - 1][0]));
       }
       break;
     case defStyles.rightArrowContainer:
     case "rightArrow_path":
     case "rightArrow": {
       // Rotate state[wordType] array backwards
-      const wordType: string = Object.keys(state[0])[0];
-      const defs: Definition[] = state[0][wordType];
+      const wordType: string = Object.keys(state[state.length - 1][0])[0];
+      const defs: Definition[] = state[state.length - 1][0][wordType];
       const defsTail: Definition = defs.shift()!;
       defs.push(defsTail);
 
-      refresh(getNewStrings(state[0]));
+      refresh(getNewStrings(state[state.length - 1][0]));
     }
     default:
       throw new Error(

@@ -1,6 +1,6 @@
 import { browser } from "webextension-polyfill-ts";
 import { Definitions, Definition, Quadrant, State } from "../types";
-import { render, addButtons } from "./utils";
+import { render, addButtons, handleArrows, handleAlignment } from "./utils";
 import * as Components from "./components";
 import frameStyles from "./styles/frame.css";
 import typeStyles from "./styles/types.css";
@@ -20,7 +20,7 @@ import defStyles from "./styles/definitions.css";
  */
 
 let selectionBox: DOMRect | undefined = undefined;
-let state: State;
+let state: State = [];
 let quadrant: Quadrant | null = null;
 let isPointerDragged: boolean = false;
 
@@ -40,9 +40,9 @@ browser.runtime.onMessage.addListener((msg) => {
       document.addEventListener("mousedown", handleMouseEvents);
       document.addEventListener("mouseup", handleMouseEvents);
     } else {
-      // Set state and retrieve first set of defs
-      state = msg;
-      const definitions: Definitions = state[0];
+      // Add msg-array to state-array
+      state.push(msg);
+      const definitions: Definitions = state[state.length - 1][0];
 
       // Generate and populate frame based on state
       const frameSkeleton: HTMLElement = createFrame(
@@ -138,11 +138,11 @@ function createFrame(
   let definitionsContainer: HTMLElement = Components.definitionsContainer.cloneNode(
     true
   ) as HTMLElement;
-  const wordType: string = Object.keys(state[0])[0];
+  const wordType: string = Object.keys(state[state.length - 1][0])[0];
   const defEl: HTMLParagraphElement = definitionsContainer.childNodes[0]
     .childNodes[0] as HTMLParagraphElement;
   definitionsContainer = addButtons(definitionsContainer);
-  if (state[0][wordType].length > 1) {
+  if (state[state.length - 1][0][wordType].length > 1) {
     // Add padding-bottom to the definition element for style
     defEl.style.paddingBottom = "4px";
   } else {
@@ -228,6 +228,13 @@ function handleMouseEvents(e: Event) {
         } else {
           body.removeChild(frame);
         }
+
+        // Remove the latest definitions array from the state stack
+        state.pop();
+
+        // Update styling
+        handleArrows();
+        handleAlignment();
       } else {
         isPointerDragged = false;
       }

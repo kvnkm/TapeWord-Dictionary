@@ -36,7 +36,7 @@ browser.contextMenus.onClicked.addListener(
         defs = await parseDefRes(defRes).catch((e) => e);
       }
 
-      let _state: State | null = defs
+      let _state: Definitions[] | null = defs
         ? Object.keys(defs).map((wordType) => ({
             [wordType]: defs![wordType],
           }))
