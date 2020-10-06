@@ -46,7 +46,7 @@ export default function addButtons(el: HTMLElement): HTMLElement {
 
     default:
       throw new Error(
-        "WORDSTAR Error: (From addButtons.ts) This component doesn't need buttons"
+        "TAPEWORD Error: (From addButtons.ts) This component doesn't need buttons"
       );
   }
 

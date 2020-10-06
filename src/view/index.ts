@@ -112,7 +112,7 @@ function getMaxWidth(quadrant: Quadrant, selectionBox: DOMRect) {
     }
     default:
       throw new Error(
-        "WORDSTAR Error: Could not calculate max-with based on quadrant"
+        "TAPEWORD Error: Could not calculate max-with based on quadrant"
       );
   }
 }
@@ -159,7 +159,7 @@ function createFrame(
 
   const frame: HTMLElement = document.createElement("div");
   frame.className = frameStyles.defFrame;
-  frame.id = "W_O_R_D_STAR";
+  frame.id = "T_A_P_E_WORD";
 
   if (quadrant === "bottomLeft" || quadrant === "topLeft") {
     definitionsContainer.style.setProperty(
@@ -228,7 +228,7 @@ function handleMouseEvents(e: Event) {
         )[0] as HTMLElement;
 
         const lastChild: HTMLElement = body.lastChild as HTMLElement;
-        if (lastChild.id === "W_O_R_D_STAR") {
+        if (lastChild.id === "T_A_P_E_WORD") {
           body.removeChild(lastChild);
         } else {
           body.removeChild(frame);
@@ -245,6 +245,6 @@ function handleMouseEvents(e: Event) {
       }
     }
     default:
-      throw new Error("WORDSTAR Error: Could not handle mouse event");
+      throw new Error("TAPEWORD Error: Could not handle mouse event");
   }
 }

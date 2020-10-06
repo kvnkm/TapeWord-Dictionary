@@ -5,7 +5,7 @@
   font-size: normal;
 }
 
-:global(#W_O_R_D_STAR) > .typesContainer {
+:global(#T_A_P_E_WORD) > .typesContainer {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -16,7 +16,7 @@
   border: none !important;
 }
 
-:global(#W_O_R_D_STAR) > .typesContainer > .typesLabel {
+:global(#T_A_P_E_WORD) > .typesContainer > .typesLabel {
   font-family: "IBM Plex Mono", "Courier New" !important;
   font-style: normal !important;
   font-weight: 500 !important;
@@ -27,8 +27,8 @@
   border: none !important;
 }
 
-:global(#W_O_R_D_STAR) > .typesContainer > .upArrowContainer,
-:global(#W_O_R_D_STAR) > .typesContainer > .downArrowContainer {
+:global(#T_A_P_E_WORD) > .typesContainer > .upArrowContainer,
+:global(#T_A_P_E_WORD) > .typesContainer > .downArrowContainer {
   background: none !important;
   box-shadow: none !important;
   cursor: pointer !important;
@@ -44,30 +44,30 @@
   font-family: initial !important;
 }
 
-:global(#W_O_R_D_STAR) > .typesContainer > .upArrowContainer:hover,
-:global(#W_O_R_D_STAR) > .typesContainer > .downArrowContainer:hover,
-:global(#W_O_R_D_STAR) > .typesContainer > .upArrowContainer:focus,
-:global(#W_O_R_D_STAR) > .typesContainer > .downArrowContainer:focus {
+:global(#T_A_P_E_WORD) > .typesContainer > .upArrowContainer:hover,
+:global(#T_A_P_E_WORD) > .typesContainer > .downArrowContainer:hover,
+:global(#T_A_P_E_WORD) > .typesContainer > .upArrowContainer:focus,
+:global(#T_A_P_E_WORD) > .typesContainer > .downArrowContainer:focus {
   background: none !important;
   border: none !important;
   outline: none !important;
 }
 
-:global(#W_O_R_D_STAR) > .typesContainer > .upArrowContainer svg,
-:global(#W_O_R_D_STAR) > .typesContainer > .downArrowContainer svg {
+:global(#T_A_P_E_WORD) > .typesContainer > .upArrowContainer svg,
+:global(#T_A_P_E_WORD) > .typesContainer > .downArrowContainer svg {
   outline: none !important;
   transition: transform 0.007s linear !important;
 }
 
-:global(#W_O_R_D_STAR) > .typesContainer > .upArrowContainer:hover svg,
-:global(#W_O_R_D_STAR) > .typesContainer > .downArrowContainer:hover svg {
+:global(#T_A_P_E_WORD) > .typesContainer > .upArrowContainer:hover svg,
+:global(#T_A_P_E_WORD) > .typesContainer > .downArrowContainer:hover svg {
   transform: scale(1.3) !important;
 }
 
-:global(#W_O_R_D_STAR) > .typesContainer > .upArrowContainer:active {
+:global(#T_A_P_E_WORD) > .typesContainer > .upArrowContainer:active {
   transform: translateY(-2px) !important;
 }
 
-:global(#W_O_R_D_STAR) > .typesContainer > .downArrowContainer:active {
+:global(#T_A_P_E_WORD) > .typesContainer > .downArrowContainer:active {
   transform: translateY(2px) !important;
 }

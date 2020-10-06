@@ -9,7 +9,7 @@ import getDefRes from "./getDefRes";
  */
 
 browser.contextMenus.create({
-  id: "WordStar-search",
+  id: "TapeWord-search",
   title: `Define "%s"`,
   contexts: ["selection"],
 });
@@ -19,7 +19,7 @@ browser.contextMenus.onClicked.addListener(
     info: Menus.OnClickData,
     tab: Tabs.Tab | undefined
   ): Promise<undefined> => {
-    if (info.menuItemId === "WordStar-search") {
+    if (info.menuItemId === "TapeWord-search") {
       // Have the content-script capture the selectionBox immediately upon click
       browser.tabs.sendMessage(tab?.id || 0, "getSelectionBox");
 

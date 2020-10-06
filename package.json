@@ -1,5 +1,5 @@
 {
-  "name": "wordstar",
+  "name": "TapeWord-Dictionary",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kvnkm/WordStar.git"
+    "url": "git+https://github.com/kvnkm/TapeWord-Dictionary.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kvnkm/WordStar/issues"
+    "url": "https://github.com/kvnkm/TapeWord-Dictionary/issues"
   },
-  "homepage": "https://github.com/kvnkm/WordStar#readme",
+  "homepage": "https://github.com/kvnkm/TapeWord-Dictionary#readme",
   "devDependencies": {
     "css-loader": "^3.6.0",
     "css-modules-typescript-loader": "^4.0.0",

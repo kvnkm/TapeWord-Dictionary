@@ -40,7 +40,7 @@ export default function render(
 }
 
 /**
- * Retrieves the nth instance of a given component (in case there are nested WordStar frames)
+ * Retrieves the nth instance of a given component (in case there are nested TapeWord frames)
  * @param cssType {string} CSS Modules hash
  */
 function getComponent(cssType: string, order: number): HTMLElement {
@@ -173,7 +173,7 @@ function handleBlur(type: "newDef" | "scroll") {
       }
     }
     default:
-      throw new Error("WORDSTAR Error: error in handling blur component");
+      throw new Error("TAPEWORD Error: error in handling blur component");
   }
 }
 
@@ -259,7 +259,7 @@ export function placeFrame(
       }
       break;
     default:
-      throw new Error("WORDSTAR Error: Could not place Frame onto DOM");
+      throw new Error("TAPEWORD Error: Could not place Frame onto DOM");
   }
 
   body.appendChild(element);
@@ -382,7 +382,7 @@ function onArrowClick(e: Event): void {
     }
     default:
       throw new Error(
-        "WORDSTAR Error: Registered click didn't originate from a button"
+        "TAPEWORD Error: Registered click didn't originate from a button"
       );
   }
 }

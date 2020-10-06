@@ -1,10 +1,10 @@
 {
   "description": "Allows word-definition searches via right-click context menu.",
   "manifest_version": 2,
-  "name": "WordStar",
+  "name": "TapeWord-Dictionary",
   "version": "1.0",
   "author": "Kevin Kim",
-  "homepage_url": "https://github.com/kvnkm/WordStar",
+  "homepage_url": "https://github.com/kvnkm/TapeWord-Dictionary",
 
   "background": {
     "scripts": ["dist/background/index.js"]
