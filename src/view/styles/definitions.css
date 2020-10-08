@@ -177,3 +177,29 @@
   > .rightArrowContainer:active {
   transform: translateX(2px) !important;
 }
+
+/* Guard to prevent native css interference */
+:global(#T_A_P_E_WORD) > .definitionsContainer::before,
+:global(#T_A_P_E_WORD) > .definitionsContainer::after,
+:global(#T_A_P_E_WORD) > .definitionsContainer > .textContainer::before,
+:global(#T_A_P_E_WORD) > .definitionsContainer > .textContainer::after,
+:global(#T_A_P_E_WORD) > .definitionsContainer > .controlsContainer::before,
+:global(#T_A_P_E_WORD) > .definitionsContainer > .controlsContainer::after,
+:global(#T_A_P_E_WORD)
+  > .definitionsContainer
+  > .textContainer
+  > .definition::before,
+:global(#T_A_P_E_WORD)
+  > .definitionsContainer
+  > .textContainer
+  > .definition::after,
+:global(#T_A_P_E_WORD)
+  > .definitionsContainer
+  > .textContainer
+  > .example::before,
+:global(#T_A_P_E_WORD)
+  > .definitionsContainer
+  > .textContainer
+  > .example::after {
+  content: none !important;
+}

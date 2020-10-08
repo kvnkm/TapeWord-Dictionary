@@ -71,3 +71,11 @@
 :global(#T_A_P_E_WORD) > .typesContainer > .downArrowContainer:active {
   transform: translateY(2px) !important;
 }
+
+/* Guard to prevent native css interference */
+:global(#T_A_P_E_WORD) > .typesContainer::before,
+:global(#T_A_P_E_WORD) > .typesContainer::after,
+:global(#T_A_P_E_WORD) > .typesContainer > .typesLabel::before,
+:global(#T_A_P_E_WORD) > .typesContainer > .typesLabel::after {
+  content: none !important;
+}
