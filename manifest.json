@@ -1,7 +1,7 @@
 {
-  "description": "Allows word-definition searches via right-click context menu.",
+  "description": "Provides definition searches for highlighted terms via right-click context menu.",
   "manifest_version": 2,
-  "name": "TapeWord-Dictionary",
+  "name": "TapeWord Dictionary",
   "version": "1.0",
   "author": "Kevin Kim",
   "homepage_url": "https://github.com/kvnkm/TapeWord-Dictionary",
@@ -9,6 +9,7 @@
   "background": {
     "scripts": ["dist/background/index.js"]
   },
+
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -16,5 +17,10 @@
     }
   ],
 
-  "permissions": ["activeTab", "contextMenus", "https://www.lexico.com/"]
+  "permissions": ["activeTab", "contextMenus", "https://www.lexico.com/"],
+
+  "icons": {
+    "16": "/dist/icons/TapeWord_Icon.svg",
+    "48": "/dist/icons/TapeWord_Icon.svg"
+  }
 }
