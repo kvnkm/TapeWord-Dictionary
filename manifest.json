@@ -20,7 +20,7 @@
   "permissions": ["activeTab", "contextMenus", "https://www.lexico.com/"],
 
   "icons": {
-    "16": "/dist/icons/TapeWord_Icon.svg",
-    "48": "/dist/icons/TapeWord_Icon.svg"
+    "16": "/src/icons/TapeWord_Icon.svg",
+    "48": "/src/icons/TapeWord_Icon.svg"
   }
 }
