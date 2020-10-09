@@ -2,11 +2,11 @@
 
 > Browser extension that enables definition searches for highlighted terms via right-click context menu
 
-### Tech
+## Tech
 
 **TapeWord was developed and is maintained within the [Ubuntu 18.04.5 LTS](https://releases.ubuntu.com/18.04/) operating system, and requires [npm](https://github.com/npm/cli) to run the build script.**
 
-TapeWord is built with the following open-source tools as _dev-dependencies_:
+The following open-source tools are used as _dev-dependencies_:
 
 - [TypeScript](https://github.com/microsoft/TypeScript) - a superset of JavaScript that compiles to clean JavaScript output
 - [webextension-polyfill-ts](https://github.com/Lusito/webextension-polyfill-ts) - a TypeScript ready "wrapper" for the WebExtension browser API Polyfill by Mozilla
@@ -20,7 +20,7 @@ TapeWord is built with the following open-source tools as _dev-dependencies_:
 - [webpack-dev-server](https://github.com/webpack/webpack-dev-server) - serves a webpack app and updates the browser on changes
 - [webpack-extension-reloader](https://github.com/rubenspgcavalcante/webpack-extension-reloader) - a webpack plugin to automatically reload browser extensions during development
 
-### Build/Installation
+## Build/Installation
 
 Clone and enter the root directory of this repository
 
@@ -40,18 +40,16 @@ There should now be a new directory `dist/` in the root directory, with the mini
 
 - Please note- the recommended method of installing the extension is **directly** through the Firefox/Chrome marketplace (link to be provided here when available :)
 
-### Usage
+## Usage
 
-Once installed and activated, simply right-click on a highlighted term while web-browsing for the option to search its definition:
+Once installed and activated, simply right-click on a highlighted term while web-browsing to search its definition, and click anywhere outside the TapeWord area to exit:
 
 ![context-menu](demo_assets/TapeWord-demo_menu.png)
 ![definition](demo_assets/TapeWord-demo_definition.png)
 
-Simply click anywhere outside the TapeWord area to exit.
-
 ---
 
-### MIT License
+## MIT License
 
 Copyright (c) 2020 kvnkm
 
