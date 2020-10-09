@@ -8,17 +8,17 @@
 
 The following open-source tools are used as _dev-dependencies_:
 
-- [TypeScript](https://github.com/microsoft/TypeScript) - a superset of JavaScript that compiles to clean JavaScript output
-- [webextension-polyfill-ts](https://github.com/Lusito/webextension-polyfill-ts) - a TypeScript ready "wrapper" for the WebExtension browser API Polyfill by Mozilla
-- [css-loader](https://github.com/webpack-contrib/css-loader) - interprets `@import` and `url()` like `import/require()` and will resolve them
-- [css-modules-typescript-loader](https://github.com/seek-oss/css-modules-typescript-loader) - a webpack loader to create TypeScript declarations for CSS Modules
-- [url-loader](https://github.com/webpack-contrib/url-loader) - a loader for webpack which transforms files into base64 URIs
-- [style-loader](https://github.com/webpack-contrib/style-loader) - used in conjunction with `style-loader` to inject CSS into the DOM
-- [ts-loader](https://github.com/TypeStrong/ts-loader) - a TypeScript loader for webpack
-- [webpack](https://github.com/webpack/webpack) - a bundler for javascript that packs many modules into a few bundled assets
-- [webpack-cli](https://github.com/webpack/webpack-cli) - webpack's Command Line Interface
-- [webpack-dev-server](https://github.com/webpack/webpack-dev-server) - serves a webpack app and updates the browser on changes
-- [webpack-extension-reloader](https://github.com/rubenspgcavalcante/webpack-extension-reloader) - a webpack plugin to automatically reload browser extensions during development
+- [TypeScript `^3.9.5`](https://github.com/microsoft/TypeScript) - a superset of JavaScript that compiles to clean JavaScript output
+- [webextension-polyfill-ts `^0.17.0`](https://github.com/Lusito/webextension-polyfill-ts) - a TypeScript ready "wrapper" for the WebExtension browser API Polyfill by Mozilla
+- [css-loader `^3.6.0`](https://github.com/webpack-contrib/css-loader) - interprets `@import` and `url()` like `import/require()` and will resolve them
+- [css-modules-typescript-loader `^4.0.0`](https://github.com/seek-oss/css-modules-typescript-loader) - a webpack loader to create TypeScript declarations for CSS Modules
+- [url-loader `^4.1.0`](https://github.com/webpack-contrib/url-loader) - a loader for webpack which transforms files into base64 URIs
+- [style-loader `^1.2.1`](https://github.com/webpack-contrib/style-loader) - used in conjunction with `style-loader` to inject CSS into the DOM
+- [ts-loader `^7.0.5`](https://github.com/TypeStrong/ts-loader) - a TypeScript loader for webpack
+- [webpack `^4.43.0`](https://github.com/webpack/webpack) - a bundler for javascript that packs many modules into a few bundled assets
+- [webpack-cli `^3.3.11`](https://github.com/webpack/webpack-cli) - webpack's Command Line Interface
+- [webpack-dev-server `^3.11.0`](https://github.com/webpack/webpack-dev-server) - serves a webpack app and updates the browser on changes
+- [webpack-extension-reloader `^1.1.4`](https://github.com/rubenspgcavalcante/webpack-extension-reloader) - a webpack plugin to automatically reload browser extensions during development
 
 ## Build/Installation
 
