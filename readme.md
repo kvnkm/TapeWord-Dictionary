@@ -38,7 +38,7 @@ $ npm run build
 
 There should now be a new directory `dist/` in the root directory, with the minified JavaScript files ready to be used for installation in the browser.
 
-- Please note- the recommended method of installing the extension is **directly** through the Firefox/Chrome marketplace (link to be provided here when available :)
+- Please note- the recommended method of installing the extension for production is **directly** through the [Firefox](https://addons.mozilla.org/en-US/firefox/addon/tapeword-dictionary/) & Chrome (link TBA) marketplaces
 
 ## Usage
 
