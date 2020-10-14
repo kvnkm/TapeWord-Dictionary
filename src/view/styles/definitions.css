@@ -55,7 +55,8 @@
   /* padding: 0 !important; */
   margin: 0 !important;
   border: none !important;
-  text-transform: none;
+  text-transform: none !important;
+  overflow: visible !important;
 }
 
 :global(#T_A_P_E_WORD) > .definitionsContainer > .textContainer > .example {
@@ -68,7 +69,8 @@
   padding: 0 !important;
   margin: 0 !important;
   border: none !important;
-  text-transform: none;
+  text-transform: none !important;
+  overflow: visible !important;
 }
 
 :global(#T_A_P_E_WORD) > .definitionsContainer > .controlsContainer {
