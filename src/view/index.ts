@@ -230,21 +230,19 @@ function handleMouseEvents(e: Event) {
         const lastChild: HTMLElement = body.lastChild as HTMLElement;
         if (lastChild.id === "T_A_P_E_WORD") {
           body.removeChild(lastChild);
-        } else {
+        } else if(frame !== undefined) {
           body.removeChild(frame);
         }
 
         // Remove the latest definitions array from the state stack
         state.pop();
 
-        // Update styling
-        handleArrows();
-        handleAlignment();
+        // // Update styling
+        // handleArrows();
+        // handleAlignment();
       } else {
         isPointerDragged = false;
       }
+    }  
     }
-    default:
-      throw new Error("TAPEWORD Error: Could not handle mouse event");
-  }
 }
