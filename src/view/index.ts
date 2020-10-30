@@ -99,16 +99,15 @@ function calcQuadrant(selectionBox: DOMRect): Quadrant {
 }
 
 function getMaxWidth(quadrant: Quadrant, selectionBox: DOMRect) {
-  const clientWidth = document.body.clientWidth;
   switch (quadrant) {
     case "bottomRight":
     case "topRight": {
-      const right: number = document.body.clientWidth - selectionBox!.right;
-      return clientWidth - right - 100;
+      const right: number = screen.width - selectionBox!.right;
+      return screen.width - right - 120;
     }
     case "bottomLeft":
     case "topLeft": {
-      return clientWidth - selectionBox!.left - 100;
+      return screen.width - selectionBox!.left - 120;
     }
     default:
       throw new Error(
@@ -230,7 +229,7 @@ function handleMouseEvents(e: Event) {
         const lastChild: HTMLElement = body.lastChild as HTMLElement;
         if (lastChild.id === "T_A_P_E_WORD") {
           body.removeChild(lastChild);
-        } else if(frame !== undefined) {
+        } else if (frame !== undefined) {
           body.removeChild(frame);
         }
 
