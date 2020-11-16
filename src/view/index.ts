@@ -12,19 +12,6 @@ import frameStyles from "./styles/frame.css";
 import typeStyles from "./styles/types.css";
 import defStyles from "./styles/definitions.css";
 
-/**
- * STRETCH FEATS
- *
- * Audio pronunciations
- * Animations
- * Frosted-glass effect on frame
- */
-
-/**
- * FIXME
- *
- * (Open a fresh page by clicking a link), (Define gibberish) - Null frame will not disappear on external-click, error states that "textContainer is undefined"
- */
 
 let selectionBox: DOMRect | undefined = undefined;
 let state: State = [];
