@@ -1,12 +1,8 @@
-import { Definition, Definitions, WordTypes } from "../types";
+import { DefString, Definition, Definitions, WordTypes } from "../types";
 
-export default async function parseDefRes(
-  defRes: Response
-): Promise<Definitions> {
-  // if (defRes instanceof TypeError) return Promise.reject(null);
-
+export default async function parseDefRes(defRes: Response): Promise<Definitions> {
   // Create containing shell
-  let definitions: Definitions = {};
+  let definitions: Definitions = [];
 
   const wordTypeSections: NodeListOf<WordTypes> = await getWordTypes(defRes);
 
@@ -23,46 +19,41 @@ export default async function parseDefRes(
    *  */
   for (const wordTypeSection of wordTypeSections) {
     // Extract word type (e.g. noun, verb, adjective)
-    const _wordType: string = (wordTypeSection.querySelectorAll(
-      "h3.ps.pos > span.pos"
-    )[0] as HTMLElement).innerText;
+    const _wordType: string = (wordTypeSection.querySelectorAll("h3.ps.pos > span.pos")[0] as HTMLElement).innerText;
 
     if (!_wordType) continue;
 
     const wordType: string = abbreviate(_wordType);
-    if (!definitions[wordType]) {
-      definitions[wordType] = [];
+
+    // Create Definition object for each new wordType
+    if (!definitions.filter((def) => def.wordType === wordType).length) {
+      const def: Definition = {
+        wordType,
+        defStrings: [],
+      };
+      definitions.push(def);
     }
+    // if (!definitions[wordType]) {
+    //   definitions[wordType] = [];
+    // }
 
     // Check for definition types (e.g. regular defs, cross-references, empty-senses)
-    const liElements: NodeListOf<Element> = wordTypeSection.querySelectorAll(
-      "ul.semb > li"
-    );
-    const crossRefEls: NodeListOf<Element> = wordTypeSection.querySelectorAll(
-      "div.crossReference"
-    );
-    const emptySenseEls: NodeListOf<Element> = wordTypeSection.querySelectorAll(
-      "div.empty_sense"
-    );
+    const liElements: NodeListOf<Element> = wordTypeSection.querySelectorAll("ul.semb > li");
+    const crossRefEls: NodeListOf<Element> = wordTypeSection.querySelectorAll("div.crossReference");
+    const emptySenseEls: NodeListOf<Element> = wordTypeSection.querySelectorAll("div.empty_sense");
 
     if (!!liElements.length) {
       // If there is a <li>, then extract the main definition containers
-      const regularDefEls = Array.from(liElements, (liEl) =>
-        liEl.querySelector("span.ind")
-      ).filter((rD) => rD !== null);
+      const regularDefEls = Array.from(liElements, (liEl) => liEl.querySelector("span.ind")).filter((rD) => rD !== null);
 
       if (!!regularDefEls.length) {
         regularDefEls.forEach((rD, i) => {
           // Extract regular definition & example if they exist
           const def: string = (rD as HTMLSpanElement).innerText;
-          const exampleContainer = wordTypeSection.querySelectorAll(
-            "div.trg > div.exg > div.ex > em"
-          )[i];
-          const example: string = exampleContainer
-            ? removeNewLines((exampleContainer as HTMLElement).innerText)
-            : "";
-          const definition: Definition = { def, example };
-          definitions[wordType].push(definition);
+          const exampleContainer = wordTypeSection.querySelectorAll("div.trg > div.exg > div.ex > em")[i];
+          const example: string = exampleContainer ? removeNewLines((exampleContainer as HTMLElement).innerText) : "";
+          const defStrings: DefString = { def, example };
+          definitions[definitions.length - 1].defStrings.push(defStrings);
         });
       }
     }
@@ -71,25 +62,19 @@ export default async function parseDefRes(
         // Extract cross-reference text
         const def: string = (cR as HTMLElement).innerText;
         const example = "";
-        const definition: Definition = { def, example };
-        definitions[wordType].push(definition);
+        const defStrings: DefString = { def, example };
+        definitions[definitions.length - 1].defStrings.push(defStrings);
       });
     }
     if (!!emptySenseEls.length) {
-      const derivativeOfEls = Array.from(emptySenseEls, (eS) =>
-        eS.querySelector("p.derivative_of")
-      ).filter((eS) => eS !== null);
+      const derivativeOfEls = Array.from(emptySenseEls, (eS) => eS.querySelector("p.derivative_of")).filter((eS) => eS !== null);
       derivativeOfEls.forEach((dO, i) => {
         // Extract empty-sense text
         const def: string = (dO as HTMLElement).innerText;
-        const exampleContainer = wordTypeSection.querySelectorAll(
-          "div.exg > div.ex > em"
-        )[i];
-        const example: string = exampleContainer
-          ? removeNewLines((exampleContainer as HTMLElement).innerText)
-          : "";
-        const definition: Definition = { def, example };
-        definitions[wordType].push(definition);
+        const exampleContainer = wordTypeSection.querySelectorAll("div.exg > div.ex > em")[i];
+        const example: string = exampleContainer ? removeNewLines((exampleContainer as HTMLElement).innerText) : "";
+        const defStrings: DefString = { def, example };
+        definitions[definitions.length - 1].defStrings.push(defStrings);
       });
     }
   }
@@ -100,14 +85,9 @@ export default async function parseDefRes(
 async function getWordTypes(defRes: Response): Promise<NodeListOf<WordTypes>> {
   //
   const parser: DOMParser = new DOMParser();
-  const resDoc: Document = parser.parseFromString(
-    await defRes.text(),
-    "text/html"
-  );
+  const resDoc: Document = parser.parseFromString(await defRes.text(), "text/html");
 
-  const wordTypeSections: NodeListOf<WordTypes> = resDoc.querySelectorAll(
-    "section.gramb"
-  );
+  const wordTypeSections: NodeListOf<WordTypes> = resDoc.querySelectorAll("section.gramb");
 
   return Promise.resolve(wordTypeSections);
 }

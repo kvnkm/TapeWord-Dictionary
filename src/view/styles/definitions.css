@@ -21,7 +21,7 @@
 /* FIXME
  * Remove unnecessary rules
 */
-:global(#T_A_P_E_WORD) > .definitionsContainer {
+.definitionsContainer {
   display: flex !important;
   flex-direction: column !important;
   position: relative;
@@ -32,7 +32,7 @@
   scrollbar-width: none;
 }
 
-:global(#T_A_P_E_WORD) > .definitionsContainer > .textContainer {
+.definitionsContainer > .textContainer {
   display: flex !important;
   flex-direction: column !important;
   justify-content: space-between !important;
@@ -45,7 +45,7 @@
   scrollbar-width: none !important;
 }
 
-:global(#T_A_P_E_WORD) > .definitionsContainer > .textContainer > .definition {
+.definitionsContainer > .textContainer > .definition {
   font-family: "IBM Plex Mono", "Courier New" !important;
   font-style: normal !important;
   font-weight: 600 !important;
@@ -59,7 +59,7 @@
   overflow: visible !important;
 }
 
-:global(#T_A_P_E_WORD) > .definitionsContainer > .textContainer > .example {
+.definitionsContainer > .textContainer > .example {
   font-family: "IBM Plex Mono", "Courier New" !important;
   font-style: italic !important;
   font-weight: 600 !important;
@@ -73,7 +73,7 @@
   overflow: visible !important;
 }
 
-:global(#T_A_P_E_WORD) > .definitionsContainer > .controlsContainer {
+.definitionsContainer > .controlsContainer {
   display: flex !important;
   justify-content: space-between !important;
   width: 70px !important;
@@ -86,7 +86,7 @@
   /* font-family: initial !important; */
 }
 
-:global(#T_A_P_E_WORD) > .definitionsContainer > .blur {
+.definitionsContainer > .blur {
   position: absolute !important;
   align-self: end !important;
   top: 0 !important;
@@ -99,14 +99,8 @@
   background: linear-gradient(to right, #ffffff00 0%, #76f7df 65%) !important;
 }
 
-:global(#T_A_P_E_WORD)
-  > .definitionsContainer
-  > .controlsContainer
-  > .leftArrowContainer,
-:global(#T_A_P_E_WORD)
-  > .definitionsContainer
-  > .controlsContainer
-  > .rightArrowContainer {
+.definitionsContainer > .controlsContainer > .leftArrowContainer,
+.definitionsContainer > .controlsContainer > .rightArrowContainer {
   background: none !important;
   border: none !important;
   box-shadow: none !important;
@@ -120,91 +114,45 @@
   border: none !important;
 }
 
-:global(#T_A_P_E_WORD)
-  > .definitionsContainer
-  > .controlsContainer
-  > .leftArrowContainer:hover,
-:global(#T_A_P_E_WORD)
-  > .definitionsContainer
-  > .controlsContainer
-  > .rightArrowContainer:hover,
-:global(#T_A_P_E_WORD)
-  > .definitionsContainer
-  > .controlsContainer
-  > .leftArrowContainer:focus,
-:global(#T_A_P_E_WORD)
-  > .definitionsContainer
-  > .controlsContainer
-  > .rightArrowContainer:focus {
+.definitionsContainer > .controlsContainer > .leftArrowContainer:hover,
+.definitionsContainer > .controlsContainer > .rightArrowContainer:hover,
+.definitionsContainer > .controlsContainer > .leftArrowContainer:focus,
+.definitionsContainer > .controlsContainer > .rightArrowContainer:focus {
   background: none !important;
   border: none !important;
   outline: none !important;
 }
 
-:global(#T_A_P_E_WORD)
-  > .definitionsContainer
-  > .controlsContainer
-  > .leftArrowContainer
-  svg,
-:global(#T_A_P_E_WORD)
-  > .definitionsContainer
-  > .controlsContainer
-  > .rightArrowContainer
-  svg {
+.definitionsContainer > .controlsContainer > .leftArrowContainer svg,
+.definitionsContainer > .controlsContainer > .rightArrowContainer svg {
   outline: none !important;
   transition: transform 0.007s linear !important;
 }
 
-:global(#T_A_P_E_WORD)
-  > .definitionsContainer
-  > .controlsContainer
-  > .leftArrowContainer:hover
-  svg,
-:global(#T_A_P_E_WORD)
-  > .definitionsContainer
-  > .controlsContainer
-  > .rightArrowContainer:hover
-  svg {
+.definitionsContainer > .controlsContainer > .leftArrowContainer:hover svg,
+.definitionsContainer > .controlsContainer > .rightArrowContainer:hover svg {
   transform: scale(1.4) !important;
 }
 
-:global(#T_A_P_E_WORD)
-  > .definitionsContainer
-  > .controlsContainer
-  > .leftArrowContainer:active {
+.definitionsContainer > .controlsContainer > .leftArrowContainer:active {
   transform: translateX(-2px) !important;
 }
 
-:global(#T_A_P_E_WORD)
-  > .definitionsContainer
-  > .controlsContainer
-  > .rightArrowContainer:active {
+.definitionsContainer > .controlsContainer > .rightArrowContainer:active {
   transform: translateX(2px) !important;
 }
 
 /* Guard to prevent native css interference */
-:global(#T_A_P_E_WORD) > .definitionsContainer::before,
-:global(#T_A_P_E_WORD) > .definitionsContainer::after,
-:global(#T_A_P_E_WORD) > .definitionsContainer > .textContainer::before,
-:global(#T_A_P_E_WORD) > .definitionsContainer > .textContainer::after,
-:global(#T_A_P_E_WORD) > .definitionsContainer > .controlsContainer::before,
-:global(#T_A_P_E_WORD) > .definitionsContainer > .controlsContainer::after,
-:global(#T_A_P_E_WORD)
-  > .definitionsContainer
-  > .textContainer
-  > .definition::before,
-:global(#T_A_P_E_WORD)
-  > .definitionsContainer
-  > .textContainer
-  > .definition::after,
-:global(#T_A_P_E_WORD)
-  > .definitionsContainer
-  > .textContainer
-  > .example::before,
-:global(#T_A_P_E_WORD)
-  > .definitionsContainer
-  > .textContainer
-  > .example::after {
+.definitionsContainer::before,
+.definitionsContainer::after,
+.definitionsContainer > .textContainer::before,
+.definitionsContainer > .textContainer::after,
+.definitionsContainer > .controlsContainer::before,
+.definitionsContainer > .controlsContainer::after,
+.definitionsContainer > .textContainer > .definition::before,
+.definitionsContainer > .textContainer > .definition::after,
+.definitionsContainer > .textContainer > .example::before,
+.definitionsContainer > .textContainer > .example::after {
   content: none !important;
 }
 
