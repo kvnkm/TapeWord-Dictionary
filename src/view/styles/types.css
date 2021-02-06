@@ -46,6 +46,22 @@
   font-family: initial !important;
 }
 
+.typesContainer > .disabledArrowContainer {
+  background: none !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+  height: 12px !important;
+  width: 12px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  line-height: 0px !important;
+  min-height: 0px !important;
+  font-style: normal !important;
+  font-size: 0 !important;
+  font-family: initial !important;
+}
+
 .typesContainer > .upArrowContainer:hover,
 .typesContainer > .downArrowContainer:hover,
 .typesContainer > .upArrowContainer:focus,

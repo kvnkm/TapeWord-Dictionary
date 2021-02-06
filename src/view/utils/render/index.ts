@@ -1,5 +1,6 @@
 import { Quadrant, Frame, RenderType } from "../../../types";
 import { getFrames } from "../../../view";
+import { upArrow, downArrow, leftArrow, rightArrow } from "../addButtons/arrowButtons";
 import frameStyles from "../../styles/frame.css";
 import typeStyles from "../../styles/types.css";
 import defStyles from "../../styles/definitions.css";
@@ -119,21 +120,97 @@ export function handleArrows(frame: Frame): void {
   const typesContainer: HTMLElement = childrenArray.filter((child) => child.className === typeStyles.typesContainer)[0];
   const upArrowContainer: HTMLButtonElement = typesContainer.children[0] as HTMLButtonElement;
   const downArrowContainer: HTMLButtonElement = typesContainer.children[2] as HTMLButtonElement;
-  const leftArrowContainer: HTMLElement = definitionsContainer.children[1].children[0] as HTMLButtonElement;
-  const rightArrowContainer: HTMLElement = definitionsContainer.children[1].children[1] as HTMLButtonElement;
+  const leftArrowContainer: HTMLButtonElement = definitionsContainer.children[1].children[0] as HTMLButtonElement;
+  const rightArrowContainer: HTMLButtonElement = definitionsContainer.children[1].children[1] as HTMLButtonElement;
 
-  // Disable upArrow if first/only wordType is displayed
-  upArrowContainer.style.visibility = frame.wordTypeIndex === 0 ? "hidden" : "visible";
+  if (frame.wordTypeIndex === 0 && upArrowContainer.disabled === false) {
+    disableArrow(upArrowContainer);
+  } else if (frame.wordTypeIndex !== 0 && upArrowContainer.disabled === true) {
+    enableArrow(upArrowContainer);
+  }
 
-  // Disable downArrow if last/only wordType is displayed
-  downArrowContainer.style.visibility = frame.wordTypeIndex === frame.defs.length - 1 ? "hidden" : "visible";
+  if (frame.wordTypeIndex === frame.defs.length - 1 && downArrowContainer.disabled === false) {
+    disableArrow(downArrowContainer);
+  } else if (frame.wordTypeIndex !== frame.defs.length - 1 && downArrowContainer.disabled === true) {
+    enableArrow(downArrowContainer);
+  }
 
-  // Disable leftArrow if first/only def/example set is displayed
-  leftArrowContainer.style.visibility = frame.defsIndex[frame.wordTypeIndex] === 0 ? "hidden" : "visible";
+  if (frame.defsIndex[frame.wordTypeIndex] === 0 && leftArrowContainer.disabled === false) {
+    disableArrow(leftArrowContainer);
+  } else if (frame.defsIndex[frame.wordTypeIndex] !== 0 && leftArrowContainer.disabled === true) {
+    enableArrow(leftArrowContainer);
+  }
 
-  // Disable rightArrow if last/only def/example set is displayed
-  rightArrowContainer.style.visibility =
-    frame.defsIndex[frame.wordTypeIndex] === frame.defs[frame.wordTypeIndex]["defStrings"].length - 1 ? "hidden" : "visible";
+  if (
+    frame.defsIndex[frame.wordTypeIndex] === frame.defs[frame.wordTypeIndex]["defStrings"].length - 1 &&
+    rightArrowContainer.disabled === false
+  ) {
+    disableArrow(rightArrowContainer);
+  } else if (
+    frame.defsIndex[frame.wordTypeIndex] !== frame.defs[frame.wordTypeIndex]["defStrings"].length - 1 &&
+    rightArrowContainer.disabled === true
+  ) {
+    enableArrow(rightArrowContainer);
+  }
+}
+
+function enableArrow(arrowContainer: HTMLButtonElement): void {
+  // Enable button
+  arrowContainer.disabled = false;
+  const svg: SVGElement = arrowContainer.children[0] as SVGElement;
+  const direction: string = svg.id.split("Arrow")[0];
+  switch (direction) {
+    case "up":
+      {
+        const _upArrow: SVGElement = upArrow.cloneNode(true) as SVGElement;
+        arrowContainer.className = typeStyles.upArrowContainer;
+        arrowContainer.removeChild(arrowContainer.children[0]);
+        arrowContainer.appendChild(_upArrow);
+      }
+      break;
+    case "down":
+      {
+        const _downArrow: SVGElement = downArrow.cloneNode(true) as SVGElement;
+        arrowContainer.className = typeStyles.downArrowContainer;
+        arrowContainer.removeChild(arrowContainer.children[0]);
+        arrowContainer.appendChild(_downArrow);
+      }
+      break;
+    case "left":
+      {
+        const _leftArrow: SVGElement = leftArrow.cloneNode(true) as SVGElement;
+        arrowContainer.className = defStyles.leftArrowContainer;
+        arrowContainer.removeChild(arrowContainer.children[0]);
+        arrowContainer.appendChild(_leftArrow);
+      }
+      break;
+    case "right": {
+      const _rightArrow: SVGElement = rightArrow.cloneNode(true) as SVGElement;
+      arrowContainer.className = defStyles.rightArrowContainer;
+      arrowContainer.removeChild(arrowContainer.children[0]);
+      arrowContainer.appendChild(_rightArrow);
+    }
+  }
+}
+
+function disableArrow(arrowContainer: HTMLButtonElement): void {
+  // Disable button
+  const definitionsContainer: HTMLElement | null = arrowContainer.closest("." + defStyles.definitionsContainer);
+  arrowContainer.className = definitionsContainer ? defStyles.disabledArrowContainer : typeStyles.disabledArrowContainer;
+  arrowContainer.disabled = true;
+
+  // Blur styling
+  const svg: SVGElement = arrowContainer.children[0] as SVGElement;
+  const path: SVGPathElement = svg.getElementsByTagName("path")[0];
+  const feOffset: SVGFEOffsetElement = svg.getElementsByTagName("feOffset")[0];
+  const feBlends: HTMLCollectionOf<SVGFEBlendElement> = svg.getElementsByTagName("feBlend");
+
+  path.setAttribute("fill-opacity", "0.03");
+
+  // // Remove svg filters
+  [feOffset, feBlends[0], feBlends[1]].forEach((el) => {
+    el.parentElement?.removeChild(el);
+  });
 }
 
 function handleBlur(type: "newDef" | "scroll", definitionsContainer: HTMLElement) {

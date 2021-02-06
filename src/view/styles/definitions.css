@@ -114,6 +114,20 @@
   border: none !important;
 }
 
+.definitionsContainer > .controlsContainer > .disabledArrowContainer {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+  height: 15px !important;
+  line-height: 0px !important;
+  min-height: 0px !important;
+  width: 15px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+}
+
 .definitionsContainer > .controlsContainer > .leftArrowContainer:hover,
 .definitionsContainer > .controlsContainer > .rightArrowContainer:hover,
 .definitionsContainer > .controlsContainer > .leftArrowContainer:focus,
