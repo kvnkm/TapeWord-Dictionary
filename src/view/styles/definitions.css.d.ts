@@ -5,6 +5,7 @@ interface CssExports {
   'controlsContainer': string;
   'definition': string;
   'definitionsContainer': string;
+  'disabledArrowContainer': string;
   'example': string;
   'leftArrowContainer': string;
   'rightArrowContainer': string;
