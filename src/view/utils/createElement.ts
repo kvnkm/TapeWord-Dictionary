@@ -40,8 +40,8 @@ export default function createElement(defs: Definitions | null, frameCount: numb
   }
 
   // Set SVG filter IDs based on frameCount
-  const svgs: HTMLCollectionOf<SVGElement> = el.getElementsByTagName("svg");
-  console.log(svgs);
+  const svgs: SVGElement[] = Array.from(el.getElementsByTagName("svg"));
+  svgs.map(setFilterID.bind(frameCount));
 
   // Populate element with data
   /// Use first def in defs array
@@ -56,4 +56,15 @@ export default function createElement(defs: Definitions | null, frameCount: numb
   exampleEl.innerText = example ? "e.g. " + example : "";
 
   return el;
+}
+
+export function setFilterID(this: number, svg: SVGElement): SVGElement {
+  const direction: string = svg.id.split("Arrow")[0];
+  const g: SVGGElement = svg.firstElementChild as SVGGElement;
+  const filter: SVGFilterElement = (svg.lastElementChild as SVGDefsElement).firstElementChild as SVGFilterElement;
+
+  g.setAttribute("filter", `url(#filter${direction.charAt(0).toUpperCase()}${direction.substring(1)}${this})`);
+  filter.setAttribute("id", `filter${direction.charAt(0).toUpperCase()}${direction.substring(1)}${this}`);
+
+  return svg;
 }

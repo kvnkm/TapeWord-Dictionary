@@ -1,5 +1,6 @@
 import { Quadrant, Frame, RenderType } from "../../types";
 import { getFrames } from "../../view";
+import { setFilterID } from "../utils";
 import { upArrow, downArrow, leftArrow, rightArrow } from "../components/arrowButtons";
 import frameStyles from "../styles/frame.css";
 import typeStyles from "../styles/types.css";
@@ -157,12 +158,13 @@ export function handleArrows(frame: Frame): void {
 function enableArrow(arrowContainer: HTMLButtonElement): void {
   // Enable button
   arrowContainer.disabled = false;
+  const frameCount: number = getFrames().length;
   const svg: SVGElement = arrowContainer.children[0] as SVGElement;
   const direction: string = svg.id.split("Arrow")[0];
   switch (direction) {
     case "up":
       {
-        const _upArrow: SVGElement = upArrow.cloneNode(true) as SVGElement;
+        const _upArrow: SVGElement = setFilterID.bind(frameCount)(upArrow.cloneNode(true) as SVGElement);
         arrowContainer.className = typeStyles.upArrowContainer;
         arrowContainer.removeChild(arrowContainer.children[0]);
         arrowContainer.appendChild(_upArrow);
@@ -170,7 +172,7 @@ function enableArrow(arrowContainer: HTMLButtonElement): void {
       break;
     case "down":
       {
-        const _downArrow: SVGElement = downArrow.cloneNode(true) as SVGElement;
+        const _downArrow: SVGElement = setFilterID.bind(frameCount)(downArrow.cloneNode(true) as SVGElement);
         arrowContainer.className = typeStyles.downArrowContainer;
         arrowContainer.removeChild(arrowContainer.children[0]);
         arrowContainer.appendChild(_downArrow);
@@ -178,14 +180,14 @@ function enableArrow(arrowContainer: HTMLButtonElement): void {
       break;
     case "left":
       {
-        const _leftArrow: SVGElement = leftArrow.cloneNode(true) as SVGElement;
+        const _leftArrow: SVGElement = setFilterID.bind(frameCount)(leftArrow.cloneNode(true) as SVGElement);
         arrowContainer.className = defStyles.leftArrowContainer;
         arrowContainer.removeChild(arrowContainer.children[0]);
         arrowContainer.appendChild(_leftArrow);
       }
       break;
     case "right": {
-      const _rightArrow: SVGElement = rightArrow.cloneNode(true) as SVGElement;
+      const _rightArrow: SVGElement = setFilterID.bind(frameCount)(rightArrow.cloneNode(true) as SVGElement);
       arrowContainer.className = defStyles.rightArrowContainer;
       arrowContainer.removeChild(arrowContainer.children[0]);
       arrowContainer.appendChild(_rightArrow);

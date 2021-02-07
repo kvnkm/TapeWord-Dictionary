@@ -1,4 +1,4 @@
-import render, { handleArrows, handleAlignment, placeFrame } from "./render";
-import createElement from "./createElement";
+import render from "./render";
+import createElement, { setFilterID } from "./createElement";
 
-export { render, handleArrows, handleAlignment, placeFrame, createElement };
+export { render, createElement, setFilterID };
