@@ -1,9 +1,9 @@
-import { Quadrant, Frame, RenderType } from "../../../types";
-import { getFrames } from "../../../view";
-import { upArrow, downArrow, leftArrow, rightArrow } from "../addButtons/arrowButtons";
-import frameStyles from "../../styles/frame.css";
-import typeStyles from "../../styles/types.css";
-import defStyles from "../../styles/definitions.css";
+import { Quadrant, Frame, RenderType } from "../../types";
+import { getFrames } from "../../view";
+import { upArrow, downArrow, leftArrow, rightArrow } from "../components/arrowButtons";
+import frameStyles from "../styles/frame.css";
+import typeStyles from "../styles/types.css";
+import defStyles from "../styles/definitions.css";
 
 export default function render(this: Frame, renderType: RenderType): void {
   if (renderType === "error") {

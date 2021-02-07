@@ -5,7 +5,6 @@ import typeStyles from "../styles/types.css";
 import defStyles from "../styles/definitions.css";
 
 export default function createElement(defs: Definitions | null, frameCount: number, quadrant: Quadrant, maxDefWidth: number) {
-
   // Return null version of element if defs is null (definition not found)
   if (!defs) {
     const nullFrame: HTMLElement = document.createElement("div");
@@ -27,10 +26,10 @@ export default function createElement(defs: Definitions | null, frameCount: numb
   el.className = frameStyles.defFrame;
   el.id = "T_A_P_E_WORD" + "_" + frameCount;
 
-  // TODO // Create and implement appropriate CSS Module classes 
+  // TODO // Create and implement appropriate CSS Module classes
   // Order the Types and Definitions components based on quadrant
   if (quadrant === "bottomLeft" || quadrant === "topLeft") {
-    definitionsContainer.style.setProperty("padding-right","17px","important");
+    definitionsContainer.style.setProperty("padding-right", "17px", "important");
     el.appendChild(typesContainer);
     el.appendChild(definitionsContainer);
   } else {
@@ -39,6 +38,10 @@ export default function createElement(defs: Definitions | null, frameCount: numb
     el.appendChild(definitionsContainer);
     el.appendChild(typesContainer);
   }
+
+  // Set SVG filter IDs based on frameCount
+  const svgs: HTMLCollectionOf<SVGElement> = el.getElementsByTagName("svg");
+  console.log(svgs);
 
   // Populate element with data
   /// Use first def in defs array
@@ -52,6 +55,5 @@ export default function createElement(defs: Definitions | null, frameCount: numb
   defEl.innerText = def;
   exampleEl.innerText = example ? "e.g. " + example : "";
 
-  return el
-
+  return el;
 }
