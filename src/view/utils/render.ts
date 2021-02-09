@@ -76,8 +76,10 @@ export default function render(this: Frame, renderType: RenderType): void {
   }
 
   // Update definition and example DOM element texts
-  defEl.innerText = this.defs[this.wordTypeIndex]["defStrings"][this.defsIndex[this.wordTypeIndex]]["def"];
-  exampleEl.innerText = this.defs[this.wordTypeIndex]["defStrings"][this.defsIndex[this.wordTypeIndex]]["example"];
+  const defString: string = this.defs[this.wordTypeIndex]["defStrings"][this.defsIndex[this.wordTypeIndex]]["def"];
+  const exampleString: string = this.defs[this.wordTypeIndex]["defStrings"][this.defsIndex[this.wordTypeIndex]]["example"];
+  defEl.innerText = defString;
+  exampleEl.innerText = exampleString ? "e.g. " + exampleString : "";
 
   // Align flex-end if textContainer is NOT scrollable and the quadrant is on the right side
   handleAlignment(this.element);

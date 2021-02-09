@@ -72,7 +72,7 @@ export function getQuadrant(): Quadrant {
 function calcQuadrant(selectionBox: DOMRect): Quadrant {
   const { x, y } = selectionBox!;
   const borderX: number = window.innerWidth * 0.75;
-  const borderY: number = window.innerHeight - 80;
+  const borderY: number = window.innerHeight - 95;
   if (x <= borderX && y <= borderY) return "topLeft";
   if (x > borderX && y <= borderY) return "topRight";
   if (x <= borderX && y > borderY) return "bottomLeft";
