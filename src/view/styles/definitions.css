@@ -170,7 +170,8 @@
   content: none !important;
 }
 
-:global(#T_A_P_E_WORD) ::-webkit-scrollbar {
+/* :global(#T_A_P_E_WORD) ::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 0px !important;
   height: 0px !important;
-}
+} */

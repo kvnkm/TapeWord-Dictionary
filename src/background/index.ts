@@ -19,7 +19,7 @@ browser.contextMenus.onClicked.addListener(
       let defs: Definitions | null;
       const defRes: Response = await getDefRes(selectionText).catch((e) => e);
 
-      defs = defRes.statusText === "OK" ? await parseDefRes(defRes).catch((e) => e) : null;
+      defs = defRes.status === 200 ? await parseDefRes(defRes).catch((e) => e) : null;
 
       browser.tabs.sendMessage(tab?.id || 0, defs);
     }

@@ -1,7 +1,7 @@
 {
-  "name": "TapeWord-Dictionary",
+  "name": "tapeword-dictionary",
   "version": "1.1.1",
-  "description": "",
+  "description": "> Browser extension that enables definition searches for highlighted terms via right-click context menu",
   "main": "index.js",
   "scripts": {
     "serve.bak": "webpack-dev-server --config=webpack.dev.js --open",
