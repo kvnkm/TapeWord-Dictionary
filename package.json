@@ -33,6 +33,6 @@
     "webpack-extension-reloader": "^1.1.4"
   },
   "dependencies": {
-    "node-forge": "^0.10.0"
+    "node-forge": "^1.0.0"
   }
 }
